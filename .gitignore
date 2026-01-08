@@ -1,0 +1,24 @@
+# Temporary files
+~$*
+*.tmp
+*.temp
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.env
+venv/
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo

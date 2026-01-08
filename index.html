@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IC++ Pricing Breakdown - Interactive Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================================================
+           CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+           ======================================================================== */
+        :root {
+            /* Base colors */
+            --bg-primary: #F5F5F5;
+            --bg-secondary: #fafafa;
+            --bg-card: #ffffff;
+            --bg-overlay: rgba(0, 0, 0, 0.8);
+            --bg-modal-overlay: rgba(0, 0, 0, 0.5);
+
+            /* Text colors */
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #888888;
+            --text-inverted: #ffffff;
+
+            /* Brand colors */
+            --brand-primary: #ff9e0c;
+            --brand-secondary: #212121;
+            --brand-tertiary: #7e7e7e;
+
+            /* UI colors */
+            --border-color: #f0f0f0;
+            --border-color-strong: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-color-strong: rgba(0, 0, 0, 0.15);
+            --shadow-color-heavy: rgba(0, 0, 0, 0.2);
+
+            /* Status colors */
+            --success-color: #4caf50;
+            --warning-color: #ffc107;
+            --warning-bg: #fff3cd;
+            --error-color: #f5576c;
+
+            /* Accent/tag colors */
+            --tag-bg: rgba(255, 158, 12, 0.1);
+            --tag-text: #5e35b1;
+
+            /* Component-specific */
+            --input-bg: #ffffff;
+            --fee-bar-bg: #f0f0f0;
+            --fee-tree-border: #e0e0e0;
+            --spinner-track: #f3f3f3;
+
+            /* Transitions */
+            --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Dark Mode Overrides */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --bg-overlay: rgba(0, 0, 0, 0.9);
+            --bg-modal-overlay: rgba(0, 0, 0, 0.7);
+
+            --text-primary: #e8e8e8;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --text-inverted: #1a1a2e;
+
+            --brand-secondary: #e94560;
+            --brand-tertiary: #a0a0a0;
+
+            --border-color: #2a2a4a;
+            --border-color-strong: #3a3a5a;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-color-strong: rgba(0, 0, 0, 0.4);
+            --shadow-color-heavy: rgba(0, 0, 0, 0.5);
+
+            --success-color: #66bb6a;
+            --warning-bg: #3d3929;
+
+            --tag-bg: rgba(255, 158, 12, 0.2);
+            --tag-text: #bb86fc;
+
+            --input-bg: #16213e;
+            --fee-bar-bg: #2a2a4a;
+            --fee-tree-border: #3a3a5a;
+            --spinner-track: #2a2a4a;
+        }
+
+        /* ========================================================================
+           BASE STYLES
+           ======================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            padding: 40px 20px;
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: var(--theme-transition);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 2px solid var(--brand-primary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: var(--theme-transition), transform 0.2s ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow-color-strong);
+        }
+
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle .icon-moon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .icon-sun {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .icon-moon {
+            display: block;
+        }
+
+        /* Upload Section */
+        .upload-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            transition: var(--theme-transition);
+        }
+
+        .upload-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--brand-primary);
+        }
+
+        .preset-section {
+            margin-bottom: 25px;
+        }
+
+        .preset-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        #presetSelector {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--brand-primary);
+            border-radius: 8px;
+            font-size: 15px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--theme-transition);
+        }
+
+        #loadPresetBtn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            background: var(--brand-primary);
+            color: var(--brand-secondary);
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        [data-theme="dark"] #loadPresetBtn {
+            color: #1a1a2e;
+        }
+
+        #loadPresetBtn:hover {
+            transform: scale(1.02);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-muted);
+        }
+
+        .divider span {
+            background: var(--bg-card);
+            padding: 0 15px;
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--brand-primary);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: var(--theme-transition);
+        }
+
+        .drop-zone p {
+            color: var(--text-primary);
+        }
+
+        .drop-zone p:last-child {
+            color: var(--text-muted);
+        }
+
+        .drop-zone:hover {
+            border-color: var(--brand-primary);
+            background: var(--tag-bg);
+        }
+
+        .drop-zone.dragging {
+            border-color: var(--brand-primary);
+            background: var(--tag-bg);
+            transform: scale(1.02);
+        }
+
+        .upload-status {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .upload-success {
+            background: var(--success-color);
+            color: var(--text-inverted);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            text-align: center;
+            transition: var(--theme-transition);
+        }
+
+        .stat-card h3 {
+            color: var(--brand-primary);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Regions Grid */
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .region-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px var(--shadow-color-strong);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px var(--shadow-color-heavy);
+        }
+
+        .region-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--border-color);
+        }
+
+        .region-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .region-flag {
+            font-size: 36px;
+        }
+
+        .region-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .region-code {
+            background: var(--brand-primary);
+            color: var(--text-inverted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .region-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: var(--theme-transition);
+        }
+
+        .region-stat {
+            text-align: center;
+        }
+
+        .region-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .region-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Fee Breakdown */
+        .fee-breakdown {
+            margin-top: 25px;
+        }
+
+        .fee-item {
+            margin-bottom: 15px;
+        }
+
+        .fee-item.clickable {
+            cursor: pointer;
+            position: relative;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .fee-item.clickable:hover {
+            background: var(--bg-secondary);
+        }
+
+        .fee-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .fee-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: var(--brand-primary);
+            color: var(--text-inverted);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            cursor: help;
+        }
+
+        .fee-badge {
+            background: var(--warning-color);
+            color: var(--text-primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .fee-amount {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .fee-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .fee-percentage {
+            font-size: 14px;
+            color: var(--text-muted);
+            background: var(--fee-bar-bg);
+            padding: 4px 10px;
+            border-radius: 8px;
+            transition: var(--theme-transition);
+        }
+
+        .fee-bar {
+            height: 8px;
+            background: var(--fee-bar-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: var(--theme-transition);
+        }
+
+        .fee-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .fee-bar-ic {
+            background: var(--brand-primary);
+        }
+
+        .fee-bar-first {
+            background: var(--brand-secondary);
+        }
+
+        .fee-bar-second {
+            background: var(--brand-tertiary);
+        }
+
+        .fee-tree {
+            margin-left: 30px;
+            border-left: 3px solid var(--fee-tree-border);
+            padding-left: 20px;
+            margin-top: 15px;
+        }
+
+        .fee-tree-item {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: var(--theme-transition);
+        }
+
+        .fee-tree-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fee-tree-icon {
+            color: var(--text-muted);
+        }
+
+        .fee-tree-amount {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .total-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--brand-secondary);
+            border-radius: 12px;
+            color: var(--text-inverted);
+            transition: var(--theme-transition);
+        }
+
+        .total-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .total-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-overlay);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: var(--bg-card);
+            padding: 40px 60px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 20px 60px var(--shadow-color-heavy);
+            transition: var(--theme-transition);
+        }
+
+        .spinner {
+            border: 4px solid var(--spinner-track);
+            border-top: 4px solid var(--brand-primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-modal-overlay);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            max-width: 700px;
+            max-height: 85vh;
+            box-shadow: 0 20px 60px var(--shadow-color-heavy);
+            animation: slideDown 0.3s;
+            display: flex;
+            flex-direction: column;
+            transition: var(--theme-transition);
+        }
+
+        .modal-header {
+            background: var(--brand-primary);
+            color: var(--text-inverted);
+            padding: 25px 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        [data-theme="dark"] .modal-header {
+            color: #1a1a2e;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close {
+            color: inherit;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .calculation-section {
+            margin-bottom: 25px;
+        }
+
+        .calculation-section h3 {
+            color: var(--brand-primary);
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculation-section ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: var(--theme-transition);
+        }
+
+        .calc-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .calc-value {
+            font-family: 'Courier New', monospace;
+            color: var(--brand-primary);
+            font-weight: 600;
+        }
+
+        .column-tag {
+            display: inline-block;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            margin: 4px 4px 4px 0;
+        }
+
+        .formula-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--brand-primary);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            line-height: 1.6;
+            color: var(--text-primary);
+            transition: var(--theme-transition);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-primary);
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .regions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .modal-content {
+                margin: 10% 15px;
+            }
+
+            .theme-toggle {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <span class="icon-sun">☀️</span>
+                <span class="icon-moon">🌙</span>
+            </button>
+            <h1>💳 IC++ Pricing Breakdown</h1>
+            <p>Interactive Cost Analysis - Upload CSV or Load Sample Data</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-card">
+            <h3>📂 Load Daily Funding Report</h3>
+
+            <!-- Preset Selector -->
+            <div class="preset-section">
+                <label class="preset-label">🎯 Quick Load Sample Data:</label>
+                <select id="presetSelector">
+                    <option value="">-- Select sample data --</option>
+                    <option value="preset4">2025-12-18 HK (4 sales) ⭐ Best</option>
+                    <option value="preset3">2025-12-22 HK (4 sales)</option>
+                    <option value="preset6">2026-01-06 🇲🇾 MY (1 sale) - Shows MY Region!</option>
+                    <option value="preset1">2026-01-06 HK (2 sales + 2 gateway events)</option>
+                    <option value="preset2">2025-12-23 HK (1 sale)</option>
+                    <option value="preset5">2025-12-15 HK (1 sale)</option>
+                </select>
+                <button id="loadPresetBtn">Load Sample Data</button>
+            </div>
+
+            <div class="divider">
+                <span style="background: white; padding: 0 15px;">OR</span>
+            </div>
+
+            <!-- File Upload -->
+            <div id="dropZone" class="drop-zone">
+                <div style="font-size: 48px; margin-bottom: 15px;">📄</div>
+                <p style="font-size: 16px; color: #333; margin-bottom: 10px;">
+                    <strong>Drag & Drop CSV here</strong> or click to browse
+                </p>
+                <p style="font-size: 14px; color: #888;">
+                    NomuPay Daily Funding Report (65 columns)
+                </p>
+                <input type="file" id="fileInput" accept=".csv" style="display: none;">
+            </div>
+
+            <div id="uploadStatus" class="upload-status">
+                <div class="upload-success">
+                    <strong>✓ File loaded:</strong> <span id="fileName"></span>
+                    <br>
+                    <span id="fileStats"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Skipped Explanation -->
+        <div class="upload-card" style="max-width: 1000px; margin-bottom: 30px;">
+            <details>
+                <summary
+                    style="font-size: 18px; font-weight: 600; color: #ff9e0c; cursor: pointer; margin-bottom: 15px;">
+                    ℹ️ Why are transactions skipped? (Click to expand)
+                </summary>
+                <div style="padding: 20px; background: #fafafa; border-radius: 8px; line-height: 1.8;">
+                    <p style="margin-bottom: 15px;"><strong>IC++ pricing applies ONLY to customer sales
+                            transactions.</strong> The following are automatically excluded from IC++ analysis:</p>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: #4caf50;">1. Gateway Events</strong> (Transaction Type = "Gateway_Events")
+                        <ul style="margin-left: 25px; margin-top: 5px;">
+                            <li><strong>Status:</strong> <span
+                                    style="color: #4caf50; font-weight: bold;">INCLUDED</span></li>
+                            <li><strong>What they are:</strong> Internal fee billing records (DB, RG, 3DS fees)</li>
+                            <li><strong>Impact:</strong> These costs are deducted from the Net Acquirer Markup.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: #ff9e0c;">2. Refund Transactions</strong> (Payment Type = "Refund")
+                        <ul style="margin-left: 25px; margin-top: 5px;">
+                            <li><strong>Amount:</strong> Negative (e.g., -$1.00)</li>
+                            <li><strong>Why skip:</strong> IC++ pricing structure applies to forward transactions, not
+                                reversals</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <strong style="color: #ff9e0c;">3. Zero-Amount Transactions</strong>
+                        <ul style="margin-left: 25px; margin-top: 5px;">
+                            <li><strong>Why skip:</strong> No transaction value to calculate percentages against</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        style="margin-top: 20px; padding: 15px; background: white; border-left: 4px solid #4caf50; border-radius: 4px;">
+                        <strong>✓ What IS analyzed:</strong> Approved Sale transactions with positive amounts<br>
+                        <strong style="color: #ff9e0c;">These are the actual customer purchases</strong> that IC++
+                        pricing applies to.
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview" id="statsOverview">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Regions Grid -->
+        <div class="regions-grid" id="regionsGrid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🤖 IC++ Pricing Breakdown Calculator</p>
+            <p>100% Client-Side • Complete Transparency • Detailed Cost Analysis</p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text" id="loadingText">Processing CSV...</div>
+            <div class="loading-subtext" id="loadingSubtext"></div>
+        </div>
+    </div>
+
+    <!-- Calculation Modal -->
+    <div id="calculationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Calculation Details</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================================================
+        // EMBEDDED SAMPLE DATA (All Daily Funding Reports)
+        // ========================================================================
+        const SAMPLE_DATA = {
+            'preset1': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-NT_FEEcfcb2a832a35021913e99,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.79,HKD,2026-01-06,e2e-b8d316ee9426345232191,,,,,,2026-01-03,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.78,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PPf30f9a2a159b3b1278a861959,2026-01-02T14:54:55.000Z,Sale,Approved,150.0,HKD,146.42,HKD,2026-01-06,e2e-b8d316ee9426345232191,VISA,CC,ecom,600212479144,74040456002019952949658,2026-01-04,009228,,Local,HK,5691,10000001,707260022301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,450936XXXXXX3102,8acda4a89b68fe4d019b7d7ca34d750d,37guAzxYPjVjKfOa4es4dzA211T,,PID-100000100,-0.22,HKD,-3.11,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,-0.15,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-PP4a8ca35d358551de42a11e326,2026-01-02T14:04:53.000Z,Sale,Approved,100.0,HKD,97.6,HKD,2026-01-06,e2e-b8d316ee9426345232191,MC,DC,ecom,600212477150,15180876002019952949635,2026-01-04,370337,,Local,HK,5691,10000001,707260022301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,544729XXXXXX7939,8acda4a79b68f0b7019b7d4e9e5440a7,37go5kg6M6cINvjKIXWtO17QiK3,,PID-100000100,-0.15,HKD,-2.05,HKD,0.0,,0.0,,0.0,,-0.1,HKD,0.0,,-0.1,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEd37c2ca5b9713f523e260,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-2.38,HKD,2026-01-06,e2e-b8d316ee9426345232191,,,,,,2026-01-03,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 three_d 2 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-2.34,HKD,0.00,,0.00,,0.00,,0.0,`,
+
+            'preset2': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-NT_FEEd249d04ee8c6301c26cd8,2025-12-22T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-23,e2e-b63b43fff224266436188,,,,,,2025-12-23,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 three_d 1 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP6802756ec3db15f7973f64699,2025-12-19T13:06:34.000Z,Sale,Approved,10.0,HKD,9.68,HKD,2025-12-23,e2e-b63b43fff224266436188,MC,DC,ecom,535311761189,15180875353019781058753,2025-12-21,633562,,Local,HK,5691,10000001,707253532301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,544729XXXXXX7939,8ac9a4a09b20a631019b34ffa32c2b2a,3739Gqq4a4sa99V3WFFJeADWitU,,PID-100000100,-0.02,HKD,-0.21,HKD,0.0,,0.0,,0.0,,-0.08,HKD,0.0,,-0.01,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE3db587159f36cbfb2bc59,2025-12-22T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-23,e2e-b63b43fff224266436188,,,,,,2025-12-23,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 three_d 1 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE49c443abf323bb83a0e8f,2025-12-22T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-23,e2e-b63b43fff224266436188,,,,,,2025-12-23,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE8eb913dc8c97ac4488864,2025-12-22T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-23,e2e-b63b43fff224266436188,,,,,,2025-12-23,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,`,
+
+            'preset3': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-NT_FEE541c4a472bbbfa736574c,2025-12-21T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.79,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-22,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.78,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP8053d2faf2d3aa659e80a9d9f,2025-12-18T14:24:27.000Z,Sale,Approved,15.0,HKD,14.55,HKD,2025-12-22,e2e-ff22e940f245161119360,VISA,CC,ecom,535211714667,74040455352019767848473,2025-12-20,938691,,Local,HK,5691,10000001,707253522301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,496604XXXXXX4110,8ac9a4a29b20a63e019b302119bd1fae,370TcUzEuqEqOrLIuWeMwON5qJG,,PID-100000100,-0.02,HKD,-0.31,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,-0.02,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-PPe17e924113c350075a8a47cb9,2025-12-18T12:00:44.000Z,Sale,Approved,10.0,HKD,9.68,HKD,2025-12-22,e2e-ff22e940f245161119360,MC,DC,ecom,535211706279,15180875352019767848434,2025-12-20,342657,,Local,HK,5691,10000001,707253522301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,544729XXXXXX7939,8ac9a49f9b208ec0019b2f9cec2f6615,370C8m2HIrl6mld82GCv4f4F2wI,,PID-100000100,-0.02,HKD,-0.21,HKD,0.0,,0.0,,0.0,,-0.08,HKD,0.0,,-0.01,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-PPfb83912d686d313e089ace272,2025-12-18T11:59:52.000Z,Sale,Approved,5.5,HKD,5.28,HKD,2025-12-22,e2e-ff22e940f245161119360,VISA,DC,ecom,535211706250,74040455352019767848424,2025-12-20,828769,,Local,HK,5691,10000001,707253522301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a29b20a63e019b2f9caca95166,370C2JkcvwDqMFTM8jUlq3TvePF,,PID-100000100,-0.01,HKD,-0.1,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,-0.01,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEa5dcb245851067e67e81f,2025-12-19T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-20,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP418734a12fb5391e1b79b6b6e,2025-12-18T13:34:06.000Z,Sale,Approved,20.0,HKD,19.46,HKD,2025-12-22,e2e-ff22e940f245161119360,MC,DC,ecom,535211711498,15180875352019767848459,2025-12-20,115941,,Local,HK,5691,10000001,707253522301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,544729XXXXXX7939,8ac9a49f9b208ec0019b2ff2e7102fea,370NUnMppb2Z8JvAXLTE230WvGv,,PID-100000100,-0.03,HKD,-0.41,HKD,0.0,,0.0,,0.0,,-0.08,HKD,0.0,,-0.02,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE302bf54b7c02fa9377b1d,2025-12-19T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-20,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE7b43649fd5bd788de2c3f,2025-12-19T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-20,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 three_d 1 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE47ceca2c98f755fb4762e,2025-12-19T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-20,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 three_d 1 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE72388f17ef307de7269bc,2025-12-21T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-3.16,HKD,2025-12-22,e2e-ff22e940f245161119360,,,,,,2025-12-22,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 three_d 3 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-3.11,HKD,0.00,,0.00,,0.00,,0.0,`,
+
+            'preset4': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-PPf4d5b6a14a74547392d983157,2025-12-16T12:26:55.000Z,Sale,Approved,5.0,HKD,4.58,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,535011609253,74040455350019741626963,2025-12-18,286407,,Foreign,MY,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,484810XXXXXX6617,8ac9a4a59b208e76019b2568d1c1209a,36ub4wnzDjmvzjW41bn5TTjwXrV,,PID-100000100,-0.01,HKD,-0.07,HKD,-0.03,HKD,0.0,,-0.19,HKD,-0.12,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-PP918f6b685d1121f554c5c66da,2025-12-15T17:53:10.000Z,Sale,Approved,1.0,HKD,0.88,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,534911579189,74040455349019728376818,2025-12-17,165680,,Local,HK,5691,10000001,707253492301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a39b208e66019b216d47016dcc,36sPdBF0USFCCpUA6DaVLUMdwx7,,PID-100000100,0.0,,-0.02,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE67e4221e878205ce3ebca,2025-12-17T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.79,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-18,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.78,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEc594f9c6b4fa758616c5b,2025-12-15T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-16,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 three_d 1 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEeadc78276c8166d1a8dec,2025-12-16T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-17,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 3 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEaea85007207ed47fac3e8,2025-12-17T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-3.55,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-18,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 3 three_d 3 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-3.5,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE3f3a5c9b694c9f90f351f,2025-12-16T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-5.53,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-17,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 4 three_d 5 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-5.45,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP6fc2d6a26edfbf85b1cddb28b,2025-12-16T15:23:11.000Z,Refund,Approved,-1.0,HKD,-12.67,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,534911579189,74040455350019741626989,2025-12-18,095776,,Local,HK,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,test-refund-1765869790,36uwW0FtYnrYL2XFcelbZhY5mQK,,PID-100000100,-11.67,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-PPf5819d65a4bc347bc89fe1491,2025-12-16T12:37:59.000Z,Sale,Approved,1.0,HKD,0.88,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,535011609716,74040455350019741626971,2025-12-18,411979,,Local,HK,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a79b2090af019b25736a976647,36ucQMz21lFvGJt3fuNANgntwGx,,PID-100000100,0.0,,-0.02,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEedc0741844ee287b96012,2025-12-15T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-16,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 1 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PPbc80dd3305fc2f2a8458df118,2025-12-16T15:59:41.000Z,Refund,Approved,-1.0,HKD,-12.67,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,534911579052,74040455350019741626997,2025-12-18,006504,,Local,HK,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,refund-1765871980,36v0x9kAzPES3A3V4iI3DAZxL1y,,PID-100000100,-11.67,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE0b6d00b33a732b48e5381,2025-12-16T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-3.16,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-17,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 rf 4 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-3.11,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE78bfcd5e9c6f974bbba01,2025-12-16T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-5.92,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-17,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 3 three_d 4 db 2 rf,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-5.83,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP2cc19784f0d1e8babfd96e59b,2025-12-16T16:44:57.000Z,Sale,Approved,5.0,HKD,4.79,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,535011623567,74040455350019741627011,2025-12-18,344466,,Local,HK,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a89b20a816019b2655289d06ad,36v6SULS38kb9tJvbXD6DC3m93E,,PID-100000100,-0.01,HKD,-0.1,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE831341c813354fea0420e,2025-12-15T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-2.36,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-16,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 three_d 2 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-2.33,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP7997b39d1ded325ab308169ff,2025-12-15T17:50:13.000Z,Sale,Approved,1.0,HKD,0.88,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,DC,ecom,534911579052,74040455349019728376800,2025-12-17,281773,,Local,HK,5691,10000001,707253492301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a59b208e76019b216a72ca0404,36sPGvsxih8N7Efc686YDVJ4Rbn,,PID-100000100,0.0,,-0.02,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE0bcb624fa3b71c7aaed84,2025-12-17T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.19,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-18,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 3 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.17,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEd722345587ef847beda13,2025-12-17T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-2.36,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-18,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 three_d 2 db,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-2.33,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEafea298f4ecdc9ceec747,2025-12-15T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.79,HKD,2025-12-18,e2e-2ec101caa145358292126,,,,,,2025-12-16,,,,,5691,,,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,,,,gatewayfee for 2 rg,PID-100000100,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.78,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PP69306e60f01db5b5dbe1b77d6,2025-12-16T16:44:28.000Z,Sale,Approved,50.0,HKD,48.73,HKD,2025-12-18,e2e-2ec101caa145358292126,VISA,CC,ecom,535011623545,74040455350019741627003,2025-12-18,464476,,Local,HK,5691,10000001,707253502301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,496604XXXXXX4110,8ac9a4a69b20a819019b26549b4517a5,36v6OthEP1nDALGZ8eytzjr11Aj,,PID-100000100,-0.08,HKD,-1.04,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,-0.05,HKD,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,`,
+
+            'preset5': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-NT_FEEa4571abf1b756612959b1,2025-12-10T00:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.4,HKD,2025-12-15,e2e-c8badd2e3378380120373,,,,,,2025-12-11,,,,,,,,344000000002532,LID-8520111699,,HK,Causeway Bay,EID-8520028455,,,,,gatewayfee for 1 rg,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.39,HKD,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEE7b14ab81a37a0ff159d76,2025-12-10T00:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-3.16,HKD,2025-12-15,e2e-c8badd2e3378380120373,,,,,,2025-12-11,,,,,,,,344000000002532,LID-8520111699,,HK,Causeway Bay,EID-8520028455,,,,,gatewayfee for 2 three_d 2 db 1 rf,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-3.11,HKD,0.00,,0.00,,0.00,,0.0,
+NP-PPb88cb92a97c3a0f18227657c5,2025-12-10T14:14:52.000Z,Sale,Approved,5.0,HKD,4.79,HKD,2025-12-15,e2e-c8badd2e3378380120373,VISA,DC,ecom,534411312845,74040455344019666016793,2025-12-12,691974,,Local,HK,5691,10000001,707253442301,344000000002532,LID-8520111699,Hero Plus (Hong Kong) Prod Test,HK,Causeway Bay,EID-8520028455,Hero Plus (Hong Kong) Limited,448060XXXXXX4207,8ac9a4a79ae3d374019b06e5b05268f2,36drSmdTxWAEZgLb5jMxSgP1HpG,,PID-100000100,-0.01,HKD,-0.1,HKD,0.0,,0.0,,-0.04,HKD,-0.06,HKD,0.0,,0.0,,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,`,
+
+            'preset6': `NP Transaction ID,Transaction Date,Transaction Type,Transaction Status,Transaction Amount,Transaction Currency,Funding Amount,Funding Currency,Funding Date,Funding ID,Payment Method,Card Type,Acceptance Channel,RRN,ARN,Billing date,Authorization code,Response Code,Issuer locality,Issuer country,MCC,Terminal ID,Terminal Batch,MID,Store ID,Store Name,Store country,Store City,Account ID,Account name,Card Number,Merchant Reference,Gateway Reference,Remarks,merchant_iso_id,MDR Amount,MDR Currency,Interchange Amount,Interchange Currency,Cross Border Amount,Cross Border Currency,Cross Currency Amount,Cross Currency Currency,Authorization Amount,Authorization Currency,Clearing Amount,Clearing Currency,Preauthorization Amount,Preauthorization Currency,Scheme Fee Bucket Amount,Scheme Fee Bucket Currency,Non Three Ds Amount,Non Three Ds Currency,Three Ds Amount,Three Ds Currency,Gateway Fee Amount,Gateway Fee Currency,GRT Amount,GRT Currency,VAT Amount,VAT Currency,ST Amount,ST Currency,WHT Amount,WHT Currency
+NP-NT_FEE6a9f5c555c359ddcd2b85,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-1.86,MYR,2026-01-06,e2e-b8fdb5496828672427328,,,,,,2026-01-03,,,,,5691,,,458000000000142,LID-600048457,Hero Plus (Malaysia) Prod Test,MY,Kuala Lumpur,EID-600004504,Hero Plus (Malaysia) SDN. BHD.,,,,gatewayfee for 3 three_d 3 db,PID-100000101,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-1.83,MYR,0.00,,0.00,,0.00,,0.0,
+NP-PPefcc6014c5c52c0c5ed1eb590,2026-01-02T14:43:56.000Z,Sale,Approved,260.0,MYR,258.43,MYR,2026-01-06,e2e-b8fdb5496828672427328,MC,DC,ecom,600212478741,15328346002019952830527,2026-01-04,260424,,Local,MY,5691,10000001,707260022301,458000000000142,LID-600048457,Hero Plus (Malaysia) Prod Test,MY,Kuala Lumpur,EID-600004504,Hero Plus (Malaysia) SDN. BHD.,549186XXXXXX8396,8acda4a29b68fcb1019b7d71e7936c88,37gsqDVmL1QXfUgV62FhnQvzUDI,,PID-100000101,-0.39,MYR,-0.63,MYR,0.0,,0.0,,-0.02,MYR,-0.27,MYR,0.0,,-0.26,MYR,0.0,,0.0,,0.0,,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEc9756c0496520f08c8e7d,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.2,MYR,2026-01-06,e2e-b8fdb5496828672427328,,,,,,2026-01-03,,,,,5691,,,458000000000142,LID-600048457,Hero Plus (Malaysia) Prod Test,MY,Kuala Lumpur,EID-600004504,Hero Plus (Malaysia) SDN. BHD.,,,,gatewayfee for 1 rg,PID-100000101,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.2,MYR,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEea1ec979deff9e567dc3a,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.62,MYR,2026-01-06,e2e-b8fdb5496828672427328,,,,,,2026-01-03,,,,,5691,,,458000000000142,LID-600048457,Hero Plus (Malaysia) Prod Test,MY,Kuala Lumpur,EID-600004504,Hero Plus (Malaysia) SDN. BHD.,,,,gatewayfee for 1 three_d 1 db,PID-100000101,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.61,MYR,0.00,,0.00,,0.00,,0.0,
+NP-NT_FEEbe1f36cbb98403f883c51,2026-01-02T08:00:00.000Z,Gateway_Events,Approved,0.0,EUR,-0.62,MYR,2026-01-06,e2e-b8fdb5496828672427328,,,,,,2026-01-03,,,,,5691,,,458000000000142,LID-600048457,Hero Plus (Malaysia) Prod Test,MY,Kuala Lumpur,EID-600004504,Hero Plus (Malaysia) SDN. BHD.,,,,gatewayfee for 3 rg,PID-100000101,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,-0.61,MYR,0.00,,0.00,,0.00,,0.0,`,
+
+        };
+
+        const PRESET_LABELS = {
+            'preset1': '2026-01-06 HK (2 sales + 2 gateway events)',
+            'preset2': '2025-12-23 HK (1 sale)',
+            'preset3': '2025-12-22 HK (4 sales)',
+            'preset4': '2025-12-18 HK (4 sales) ⭐ Best',
+            'preset5': '2025-12-15 HK (1 sale)',
+            'preset6': '2026-01-06 🇲🇾 MY (1 sale) - Shows MY Region!',
+        };
+
+
+        // ========================================================================
+        // GLOBAL STATE
+        // ========================================================================
+
+
+        let csvData = null;
+        const regionMeta = {
+            'HK': { name: 'Hong Kong', flag: '🇭🇰', symbol: 'HK$' },
+            'MY': { name: 'Malaysia', flag: '🇲🇾', symbol: 'RM' },
+            'TH': { name: 'Thailand', flag: '🇹🇭', symbol: '฿' },
+            'UNKNOWN': { name: 'Other', flag: '🌐', symbol: '$' }
+        };
+
+        // ========================================================================
+        // UI HELPERS
+        // ========================================================================
+
+        function showLoading(message = 'Processing CSV...', subtext = '') {
+            const overlay = document.getElementById('loadingOverlay');
+            document.getElementById('loadingText').textContent = message;
+            document.getElementById('loadingSubtext').textContent = subtext;
+            overlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        function showModal(feeType, region, cardType) {
+            const modal = document.getElementById('calculationModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            let content = '';
+            let title = '';
+
+            if (feeType === 'ic') {
+                title = '💱 IC (Interchange Fee) Calculation';
+                content = `
+                    <div class="calculation-section">
+                        <h3>📊 Data Source</h3>
+                        <p>This value comes from the NomuPay Daily Funding Report CSV file.</p>
+                        <div class="calc-row">
+                            <span class="calc-label">CSV Column:</span>
+                            <span class="calc-value"><span class="column-tag">Interchange Amount</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Column Number:</span>
+                            <span class="calc-value">38</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Region Filter:</span>
+                            <span class="calc-value">${region}</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Card Type Filter:</span>
+                            <span class="calc-value">${cardType}</span>
+                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔢 Calculation Method</h3>
+                        <div class="formula-box">
+IC Total = SUM(Interchange Amount)
+WHERE Account name contains "${region}"
+  AND Card Type = "${cardType}"
+  AND Transaction Type = "Sale"
+  AND Transaction Status = "Approved"</div>
+                        <p><strong>What is IC (Interchange)?</strong></p>
+                        <p>The Interchange Fee is paid to the card-issuing bank. It varies based on:</p>
+                        <ul>
+                            <li>Card type (Credit vs Debit)</li>
+                            <li>Card brand (Visa, Mastercard, etc.)</li>
+                            <li>Transaction type (ECOM, POS, etc.)</li>
+                            <li>Issuer country vs Merchant country</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (feeType === 'first') {
+                title = '🏦 1st Plus (Scheme Fee) Calculation';
+                content = `
+                    <div class="calculation-section">
+                        <h3>📊 Data Source</h3>
+                        <p>This value comes from the NomuPay Daily Funding Report CSV file.</p>
+                        <div class="calc-row">
+                            <span class="calc-label">CSV Column:</span>
+                            <span class="calc-value"><span class="column-tag">Scheme Fee Bucket Amount</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Column Number:</span>
+                            <span class="calc-value">50</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Region Filter:</span>
+                            <span class="calc-value">${region}</span>
+                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔢 Calculation Method</h3>
+                        <div class="formula-box">
+1st Plus Total = SUM(Scheme Fee Bucket Amount)
+WHERE Account name contains "${region}"
+  AND Card Type = "${cardType}"</div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>💡 What is 1st Plus (Scheme Fee)?</h3>
+                        <p>The Scheme Fee is charged by card networks (Visa, Mastercard, etc.) for:</p>
+                        <ul>
+                            <li>Processing transactions through their network</li>
+                            <li>Authorization and clearing services</li>
+                            <li>Network maintenance and security</li>
+                            <li>Cross-border transaction processing</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (feeType === 'second') {
+                title = '🔧 2nd Plus (Acquirer Markup) Calculation';
+                content = `
+                    <div class="calculation-section">
+                        <h3>📊 Data Source</h3>
+                        <p>This is a <strong>calculated value</strong> derived from multiple CSV columns.</p>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔢 Primary Formula</h3>
+                        <div class="formula-box">
+2nd Plus = MDR - IC - 1st Plus</div>
+                        <p>Where:</p>
+                        <div class="calc-row">
+                            <span class="calc-label">MDR:</span>
+                            <span class="calc-value"><span class="column-tag">MDR Amount</span> (Col 36)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">IC:</span>
+                            <span class="calc-value"><span class="column-tag">Interchange Amount</span> (Col 38)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">1st Plus:</span>
+                            <span class="calc-value"><span class="column-tag">Scheme Fee Bucket Amount</span> (Col 50)</span>
+                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔧 2nd Plus Components Breakdown</h3>
+                        <p>The 2nd Plus is broken down into these CSV columns:</p>
+                        <div class="calc-row">
+                            <span class="calc-label">Gateway Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Gateway Fee Amount</span> (Col 56)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Authorization:</span>
+                            <span class="calc-value"><span class="column-tag">Authorization Amount</span> (Col 44)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Clearing:</span>
+                            <span class="calc-value"><span class="column-tag">Clearing Amount</span> (Col 46)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Cross-Border:</span>
+                            <span class="calc-value"><span class="column-tag">Cross Border Amount</span> (Col 40)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">3DS Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Three Ds Amount</span> (Col 54)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">VAT:</span>
+                            <span class="calc-value"><span class="column-tag">VAT Amount</span> (Col 60)</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">WHT:</span>
+                            <span class="calc-value"><span class="column-tag">WHT Amount</span> (Col 64)</span>
+                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>💰 Net Acquirer Markup</h3>
+                        <div class="formula-box">
+Net Markup = 2nd Plus - (
+  Gateway Fee +
+  Authorization Fee +
+  Clearing Fee +
+  Cross-Border Fee +
+  Cross-Currency Fee +
+  3DS Fee +
+  Taxes
+)</div>
+                        <p>This is the <strong>pure profit margin</strong> retained by the acquirer after all operational costs.</p>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>💡 What is 2nd Plus (Acquirer Markup)?</h3>
+                        <p>The Acquirer Markup covers:</p>
+                        <ul>
+                            <li>Gateway processing fees (3DS, Capture, Debit, Refund events)</li>
+                            <li>Authorization and clearing operational costs</li>
+                            <li>Risk management and fraud prevention</li>
+                            <li>Cross-border and currency conversion handling</li>
+                            <li>Taxes (VAT, WHT, GRT, ST)</li>
+                            <li>Acquirer profit margin</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (feeType === 'mdr') {
+                title = '📊 Total Fees (Sales) Explanation';
+                content = `
+                    <div class="calculation-section">
+                        <h3>📊 What This Shows</h3>
+                        <p>This is the <strong>sum of all fees</strong> deducted from Sale transactions.</p>
+                        <div class="formula-box">
+Total Fees = IC + Scheme Fee + 2nd Plus (Acquirer Fees)</div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔢 Calculation Method</h3>
+                        <p>From Sale rows in the CSV, we sum:</p>
+                        <div class="calc-row">
+                            <span class="calc-label">IC (Interchange):</span>
+                            <span class="calc-value"><span class="column-tag">Interchange Amount</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Scheme Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Scheme Fee Bucket Amount</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">2nd Plus includes:</span>
+                            <span class="calc-value">MDR Amount + Auth + Clearing + Gateway + CrossBorder + 3DS + Taxes</span>
+                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>⚙️ Gateway Events (Billed Separately)</h3>
+                        <p>Per <strong>NomuPay documentation</strong>, gateway events are billed in <strong>separate rows</strong>:</p>
+                        <ul>
+                            <li><strong>Transaction Type:</strong> "Gateway_Events"</li>
+                            <li><strong>Remarks:</strong> Shows event counts, e.g., "gatewayfee for 100 three_d 100 db 2 rf"</li>
+                        </ul>
+                        <p style="margin-top: 15px;">These include: 3D Secure (three_d), Debit (db), Register (rg), Refund (rf), Capture (cp), etc.</p>
+                        <p>The "⚙️ Gateway Ops" line under 2nd Plus shows these fees collected from Gateway_Events rows.</p>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>💰 Full Picture</h3>
+                        <div class="formula-box">
+Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
+                        <p style="margin-top: 10px;">This matches: Transaction Amount − Funding Amount for all rows.</p>
+                    </div>
+                `;
+            }
+
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('calculationModal').classList.remove('active');
+        }
+
+        // ========================================================================
+        // CSV PARSER
+        // ========================================================================
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+
+                const values = lines[i].split(',');
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index] ? values[index].trim() : '';
+                });
+                data.push(row);
+            }
+
+            return data;
+        }
+
+        // ========================================================================
+        // IC++ CALCULATOR
+        // ========================================================================
+
+        // Event type definitions from Nomupay documentation
+        const EVENT_TYPES = {
+            'three_d': '3D Secure',
+            'cp': 'Capture',
+            'db': 'Debit',
+            'dr': 'Deregister',
+            'ds': 'Deschedule',
+            'pa': 'Preauthorisation',
+            'rb': 'Rebill',
+            'rf': 'Refund',
+            'rg': 'Register',
+            'rr': 'Reregister',
+            'rs': 'Reschedule',
+            'rv': 'Reversal',
+            'sd': 'Schedule'
+        };
+
+        // Parse remarks like "gatewayfee for 100 three_d 100 db 2 rf"
+        function parseRemarks(remarks) {
+            const events = {};
+            if (!remarks || !remarks.includes('gatewayfee for')) return events;
+
+            // Extract the part after "gatewayfee for"
+            const match = remarks.match(/gatewayfee for (.+)/i);
+            if (!match) return events;
+
+            const eventPart = match[1];
+            // Match patterns like "100 three_d" or "2 db"
+            const regex = /(\d+)\s+(\w+)/g;
+            let m;
+            while ((m = regex.exec(eventPart)) !== null) {
+                const count = parseInt(m[1], 10);
+                const eventType = m[2].toLowerCase();
+                if (EVENT_TYPES[eventType]) {
+                    events[eventType] = (events[eventType] || 0) + count;
+                }
+            }
+            return events;
+        }
+
+        function calculateICPP(rows) {
+            const stats = {};
+            const gatewayEventFees = {}; // Track gateway event fees per region
+            let totalProcessed = 0;
+            let totalSkipped = 0;
+
+            // First pass: collect Gateway Events fees per region
+            rows.forEach(row => {
+                const txnType = row['Transaction Type'] || '';
+                const status = row['Transaction Status'] || '';
+
+                if (txnType === 'Gateway_Events' && status === 'Approved') {
+                    const merchant = row['Account name'] || '';
+                    let region = 'UNKNOWN';
+                    if (merchant.includes('Hong Kong')) region = 'HK';
+                    else if (merchant.includes('Malaysia')) region = 'MY';
+                    else if (merchant.includes('Thailand')) region = 'TH';
+
+                    const gateway = parseFloat(row['Gateway Fee Amount'] || 0);
+                    const remarks = row['Remarks'] || '';
+                    const events = parseRemarks(remarks);
+
+                    if (!gatewayEventFees[region]) {
+                        gatewayEventFees[region] = { gateway: 0, count: 0, events: {} };
+                    }
+                    gatewayEventFees[region].gateway += gateway;
+                    gatewayEventFees[region].count++;
+
+                    // Aggregate event counts
+                    Object.keys(events).forEach(eventType => {
+                        gatewayEventFees[region].events[eventType] =
+                            (gatewayEventFees[region].events[eventType] || 0) + events[eventType];
+                    });
+                }
+            });
+
+            // Second pass: process Sales and distribute gateway event fees
+            rows.forEach(row => {
+                const txnType = row['Transaction Type'] || '';
+                const status = row['Transaction Status'] || '';
+                const amount = parseFloat(row['Transaction Amount'] || 0);
+
+                // Only process Sale transactions
+                if (txnType !== 'Sale' || status !== 'Approved' || amount === 0) {
+                    totalSkipped++;
+                    return;
+                }
+
+                // Identify region
+                const merchant = row['Account name'] || '';
+                let region = 'UNKNOWN';
+                if (merchant.includes('Hong Kong')) region = 'HK';
+                else if (merchant.includes('Malaysia')) region = 'MY';
+                else if (merchant.includes('Thailand')) region = 'TH';
+
+                const cardType = row['Card Type'] || 'UNKNOWN';
+                const currency = row['Transaction Currency'] || '';
+
+                // Parse fees
+                const mdr = parseFloat(row['MDR Amount'] || 0);
+                const ic = parseFloat(row['Interchange Amount'] || 0);
+                let schemeRaw = parseFloat(row['Scheme Fee Bucket Amount'] || 0);
+                const scheme = region === 'MY' ? 0 : schemeRaw; // MY special case
+
+                const gateway = parseFloat(row['Gateway Fee Amount'] || 0);
+                const auth = parseFloat(row['Authorization Amount'] || 0);
+                const clearing = parseFloat(row['Clearing Amount'] || 0);
+                const crossBorder = parseFloat(row['Cross Border Amount'] || 0);
+                const crossCurrency = parseFloat(row['Cross Currency Amount'] || 0);
+                const preauth = parseFloat(row['Preauthorization Amount'] || 0);
+                const threeDS = parseFloat(row['Three Ds Amount'] || 0);
+                const nonThreeDS = parseFloat(row['Non Three Ds Amount'] || 0);
+                const vat = parseFloat(row['VAT Amount'] || 0);
+                const wht = parseFloat(row['WHT Amount'] || 0);
+                const grt = parseFloat(row['GRT Amount'] || 0);
+                const st = parseFloat(row['ST Amount'] || 0);
+
+                // 2nd Plus = All acquirer fees (NOT derived from MDR column, but from actual fee columns)
+                // The "MDR Amount" column is misleadingly named - it's just a flat fee, not IC+Scheme+Acquirer
+                const acquirerFees = mdr + gateway + auth + clearing + crossBorder + crossCurrency +
+                    preauth + threeDS + nonThreeDS + vat + wht + grt + st;
+
+                // True Total Fees = IC + Scheme + All Acquirer Fees
+                const totalFees = ic + scheme + acquirerFees;
+
+                // Net Acquirer Markup = 2nd Plus minus operational costs minus taxes
+                const operationalCosts = gateway + auth + clearing + crossBorder + crossCurrency + preauth + threeDS + nonThreeDS;
+                const taxes = vat + wht + grt + st;
+                const netMarkup = mdr - operationalCosts - taxes; // MDR Amount minus ops/taxes = pure markup
+
+                // Initialize if needed
+                if (!stats[region]) stats[region] = { _gatewayEvents: gatewayEventFees[region] || { gateway: 0, count: 0, events: {} } };
+                if (!stats[region][cardType]) {
+                    stats[region][cardType] = {
+                        count: 0, volume: 0, ic: 0, scheme: 0, acquirerFees: 0, totalFees: 0, mdr: 0,
+                        gateway: 0, auth: 0, clearing: 0, crossBorder: 0, crossCurrency: 0,
+                        preauth: 0, threeDS: 0, nonThreeDS: 0, vat: 0, wht: 0, grt: 0,
+                        st: 0, netMarkup: 0, currency: currency
+                    };
+                }
+
+                // Aggregate
+                const bucket = stats[region][cardType];
+                bucket.count++;
+                bucket.volume += amount;
+                bucket.ic += ic;
+                bucket.scheme += scheme;
+                bucket.acquirerFees += acquirerFees;
+                bucket.totalFees += totalFees;
+                bucket.mdr += mdr;
+                bucket.gateway += gateway;
+                bucket.auth += auth;
+                bucket.clearing += clearing;
+                bucket.crossBorder += crossBorder;
+                bucket.crossCurrency += crossCurrency;
+                bucket.preauth += preauth;
+                bucket.threeDS += threeDS;
+                bucket.nonThreeDS += nonThreeDS;
+                bucket.vat += vat;
+                bucket.wht += wht;
+                bucket.grt += grt;
+                bucket.st += st;
+                bucket.netMarkup += netMarkup;
+
+                totalProcessed++;
+            });
+
+            return { stats, totalProcessed, totalSkipped };
+        }
+
+        // ========================================================================
+        // UI RENDERING
+        // ========================================================================
+
+        function renderResults(result) {
+            const { stats, totalProcessed, totalSkipped } = result;
+
+            // Calculate grand totals across all regions
+            let grandTotalVolume = 0;
+            let grandTotalFees = 0;
+            let grandTotalGatewayEvents = 0;
+            let primaryCurrency = '';
+
+            Object.keys(stats).forEach(region => {
+                const gatewayEvents = stats[region]._gatewayEvents || { gateway: 0 };
+                grandTotalGatewayEvents += Math.abs(gatewayEvents.gateway);
+
+                Object.keys(stats[region]).filter(k => k !== '_gatewayEvents').forEach(cardType => {
+                    const data = stats[region][cardType];
+                    grandTotalVolume += data.volume;
+                    grandTotalFees += Math.abs(data.totalFees);
+                    if (!primaryCurrency && data.currency) primaryCurrency = data.currency;
+                });
+            });
+
+            const grandTotalAllFees = grandTotalFees + grandTotalGatewayEvents;
+            const netIncoming = grandTotalVolume - grandTotalAllFees;
+            const totalRegions = Object.keys(stats).length;
+
+            document.getElementById('statsOverview').innerHTML = `
+                <div class="stat-card">
+                    <h3>Sales Analyzed</h3>
+                    <div class="value">${totalProcessed}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Regions</h3>
+                    <div class="value">${totalRegions}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Volume</h3>
+                    <div class="value" style="font-size: 28px;">${grandTotalVolume.toFixed(2)}</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: white;">
+                    <h3 style="color: rgba(255,255,255,0.9);">Total Fees</h3>
+                    <div class="value" style="font-size: 28px;">${grandTotalAllFees.toFixed(2)}</div>
+                    <div style="font-size: 11px; opacity: 0.9; margin-top: 5px;">Sales: ${grandTotalFees.toFixed(2)} + Gateway: ${grandTotalGatewayEvents.toFixed(2)}</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1a1a2e;">
+                    <h3 style="color: rgba(0,0,0,0.7);">Net Incoming</h3>
+                    <div class="value" style="font-size: 28px;">${netIncoming.toFixed(2)}</div>
+                </div>
+            `;
+
+            // Render region cards
+            const regionsGrid = document.getElementById('regionsGrid');
+            regionsGrid.innerHTML = '';
+
+            Object.keys(stats).sort().forEach(region => {
+                const gatewayEvents = stats[region]._gatewayEvents || { gateway: 0, count: 0 };
+
+                Object.keys(stats[region]).filter(k => k !== '_gatewayEvents').sort().forEach(cardType => {
+                    const data = stats[region][cardType];
+                    const meta = regionMeta[region] || regionMeta['UNKNOWN'];
+
+                    const icPct = data.volume ? Math.abs(data.ic / data.volume * 100) : 0;
+                    const schemePct = data.volume ? Math.abs(data.scheme / data.volume * 100) : 0;
+                    const acquirerPct = data.volume ? Math.abs(data.acquirerFees / data.volume * 100) : 0;
+                    const totalFeesPct = data.volume ? Math.abs(data.totalFees / data.volume * 100) : 0;
+
+                    // Bar widths based on total fees (not MDR Amount)
+                    const totalFeesAbs = Math.abs(data.totalFees);
+                    const icWidth = totalFeesAbs ? Math.abs(data.ic) / totalFeesAbs * 100 : 0;
+                    const schemeWidth = totalFeesAbs ? Math.abs(data.scheme) / totalFeesAbs * 100 : 0;
+                    const acquirerWidth = totalFeesAbs ? Math.abs(data.acquirerFees) / totalFeesAbs * 100 : 0;
+
+                    const card = document.createElement('div');
+                    card.className = 'region-card';
+                    card.innerHTML = `
+                        <div class="region-header">
+                            <div class="region-title">
+                                <span class="region-flag">${meta.flag}</span>
+                                <span class="region-name">${meta.name}</span>
+                            </div>
+                            <div class="region-code">${region}</div>
+                        </div>
+
+                        <div class="region-stats">
+                            <div class="region-stat">
+                                <div class="region-stat-label">Volume</div>
+                                <div class="region-stat-value">${meta.symbol}${Math.abs(data.volume).toFixed(2)}</div>
+                            </div>
+                            <div class="region-stat">
+                                <div class="region-stat-label">Transactions</div>
+                                <div class="region-stat-value">${data.count}</div>
+                            </div>
+                            <div class="region-stat">
+                                <div class="region-stat-label">Card Type</div>
+                                <div class="region-stat-value">${cardType}</div>
+                            </div>
+                        </div>
+
+                        <div class="fee-breakdown">
+                            <div class="fee-item clickable" onclick="showModal('ic', '${region}', '${cardType}')">
+                                <div class="fee-header">
+                                    <div class="fee-label">
+                                        💱 IC (Interchange)
+                                        <span class="info-icon">i</span>
+                                    </div>
+                                    <div class="fee-amount">
+                                        <span class="fee-value">${meta.symbol}${Math.abs(data.ic).toFixed(2)}</span>
+                                        <span class="fee-percentage">${icPct.toFixed(2)}%</span>
+                                    </div>
+                                </div>
+                                <div class="fee-bar">
+                                    <div class="fee-bar-fill fee-bar-ic" style="width: ${icWidth.toFixed(1)}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="fee-item clickable" onclick="showModal('first', '${region}', '${cardType}')">
+                                <div class="fee-header">
+                                    <div class="fee-label">
+                                        🏦 1st Plus (Scheme)
+                                        <span class="info-icon">i</span>
+                                    </div>
+                                    <div class="fee-amount">
+                                        <span class="fee-value">${meta.symbol}${Math.abs(data.scheme).toFixed(2)}</span>
+                                        <span class="fee-percentage">${schemePct.toFixed(2)}%</span>
+                                    </div>
+                                </div>
+                                <div class="fee-bar">
+                                    <div class="fee-bar-fill fee-bar-first" style="width: ${schemeWidth.toFixed(1)}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="fee-item clickable" onclick="showModal('second', '${region}', '${cardType}')">
+                                <div class="fee-header">
+                                    <div class="fee-label">
+                                        🔧 2nd Plus (Acquirer)
+                                        <span class="info-icon">i</span>
+                                    </div>
+                                    <div class="fee-amount">
+                                        <span class="fee-value">${meta.symbol}${Math.abs(data.acquirerFees).toFixed(2)}</span>
+                                        <span class="fee-percentage">${acquirerPct.toFixed(2)}%</span>
+                                    </div>
+                                </div>
+                                <div class="fee-bar">
+                                    <div class="fee-bar-fill fee-bar-second" style="width: ${acquirerWidth.toFixed(1)}%"></div>
+                                </div>
+
+                                <div class="fee-tree">
+                                    ${generateTreeItems(data, meta.symbol)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="total-section clickable" onclick="showModal('mdr', '${region}', '${cardType}')">
+                            <div class="total-label">Total Fees (Sales) <span class="info-icon" style="background: #ffffff; color: #212121;">i</span></div>
+                            <div class="total-value">${meta.symbol}${Math.abs(data.totalFees).toFixed(2)} (${totalFeesPct.toFixed(2)}%)</div>
+                        </div>
+                    `;
+                    regionsGrid.appendChild(card);
+                });
+
+                // Add Gateway Events card for this region (once, not per card type)
+                if (gatewayEvents && Math.abs(gatewayEvents.gateway) > 0.001) {
+                    const meta = regionMeta[region] || regionMeta['UNKNOWN'];
+                    const events = gatewayEvents.events || {};
+                    const gwCard = document.createElement('div');
+                    gwCard.className = 'region-card';
+                    gwCard.style.background = 'linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%)';
+                    gwCard.innerHTML = `
+                        <div class="region-header">
+                            <div class="region-title">
+                                <span class="region-flag">⚙️</span>
+                                <span class="region-name">Gateway Events</span>
+                            </div>
+                            <div class="region-code" style="background: #856404;">${region}</div>
+                        </div>
+
+                        <div class="region-stats" style="background: rgba(255,255,255,0.5);">
+                            <div class="region-stat">
+                                <div class="region-stat-label">Event Rows</div>
+                                <div class="region-stat-value">${gatewayEvents.count}</div>
+                            </div>
+                            <div class="region-stat">
+                                <div class="region-stat-label">Total Fee</div>
+                                <div class="region-stat-value">${meta.symbol}${Math.abs(gatewayEvents.gateway).toFixed(2)}</div>
+                            </div>
+                        </div>
+
+                        <div class="fee-breakdown">
+                            <p style="font-size: 13px; color: #5d4e0f; margin-bottom: 15px;">These are <strong>fixed per-event fees</strong> billed separately from Sale transactions:</p>
+                            ${Object.keys(events).filter(k => events[k] > 0).map(eventType => `
+                                <div class="fee-tree-item" style="background: rgba(255,255,255,0.7);">
+                                    <div class="fee-tree-label">
+                                        <span class="fee-tree-icon">├─</span> ${EVENT_TYPES[eventType] || eventType}
+                                    </div>
+                                    <div class="fee-tree-amount" style="font-weight: 600;">${events[eventType]} events</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="total-section" style="background: #856404;">
+                            <div class="total-label">Gateway Events Fee</div>
+                            <div class="total-value">${meta.symbol}${Math.abs(gatewayEvents.gateway).toFixed(2)}</div>
+                        </div>
+                    `;
+                    regionsGrid.appendChild(gwCard);
+                }
+            });
+
+            // Animate bars
+            setTimeout(() => {
+                document.querySelectorAll('.fee-bar-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = width, 50);
+                });
+            }, 100);
+        }
+
+        function generateTreeItems(data, symbol) {
+            const items = [
+                { label: 'MDR Amount', amount: data.mdr },
+                { label: 'Gateway Fee (Sales)', amount: data.gateway },
+                { label: 'Authorization Fee', amount: data.auth },
+                { label: 'Clearing Fee', amount: data.clearing },
+                { label: 'Cross-Border Fee', amount: data.crossBorder },
+                { label: 'Cross-Currency Fee', amount: data.crossCurrency },
+                { label: 'Preauth Fee', amount: data.preauth },
+                { label: '3DS Fee', amount: data.threeDS },
+                { label: 'Non-3DS Fee', amount: data.nonThreeDS },
+                { label: 'VAT', amount: data.vat },
+                { label: 'WHT', amount: data.wht },
+                { label: 'GRT', amount: data.grt },
+                { label: 'ST', amount: data.st },
+            ];
+
+            // Add Net Acquirer Markup
+            items.push({ label: '💰 Net Acquirer Markup', amount: data.netMarkup, isTotal: true });
+
+            let html = '';
+            const nonZeroItems = items.filter(item => Math.abs(item.amount) > 0.001);
+
+            nonZeroItems.forEach((item, index) => {
+                const isLast = index === nonZeroItems.length - 1;
+                const pct = data.volume ? Math.abs(item.amount / data.volume * 100) : 0;
+                const icon = isLast ? '└─' : '├─';
+                const highlightStyle = item.highlight ? 'background: #fff3cd; border-left: 3px solid #ffc107;' : '';
+                const totalStyle = item.isTotal ? 'font-weight: bold; background: #e8f5e9;' : '';
+                const breakdownHtml = item.breakdown ?
+                    `<div style="font-size: 11px; color: #5d4e0f; margin-top: 4px; font-style: italic;">📊 ${item.breakdown}</div>` : '';
+
+                html += `
+                    <div class="fee-tree-item" style="${highlightStyle}${totalStyle}">
+                        <div class="fee-tree-label">
+                            <span class="fee-tree-icon">${icon}</span> ${item.label}
+                            ${breakdownHtml}
+                        </div>
+                        <div class="fee-tree-amount">${symbol}${Math.abs(item.amount).toFixed(2)} (${pct.toFixed(3)}%)</div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        // ========================================================================
+        // FILE HANDLING
+        // ========================================================================
+
+        function processData(csvText, fileName) {
+            showLoading('Parsing CSV...', 'Reading columns and rows');
+
+            setTimeout(() => {
+                const rows = parseCSV(csvText);
+
+                if (rows.length === 0) {
+                    hideLoading();
+                    alert('No data found in CSV');
+                    return;
+                }
+
+                document.getElementById('fileName').textContent = fileName;
+                document.getElementById('fileStats').textContent = `${rows.length} rows • ${Object.keys(rows[0]).length} columns`;
+                document.getElementById('uploadStatus').style.display = 'block';
+
+                showLoading('Calculating IC++ breakdown...', `Processing ${rows.length} transactions`);
+
+                setTimeout(() => {
+                    const result = calculateICPP(rows);
+                    renderResults(result);
+                    hideLoading();
+                }, 100);
+            }, 100);
+        }
+
+        // ========================================================================
+        // EVENT LISTENERS
+        // ========================================================================
+
+        // Load preset
+        document.getElementById('loadPresetBtn').addEventListener('click', () => {
+            const preset = document.getElementById('presetSelector').value;
+            if (!preset) {
+                alert('Please select sample data from the dropdown first');
+                return;
+            }
+
+            const csvText = SAMPLE_DATA[preset];
+            if (csvText) {
+                processData(csvText, `Sample: ${preset}`);
+            }
+        });
+
+        // Drag & drop
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragging');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragging');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragging');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                readFile(file);
+            } else {
+                alert('Please upload a CSV file');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) readFile(file);
+        });
+
+        function readFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                processData(e.target.result, file.name);
+            };
+            reader.onerror = () => {
+                alert('Error reading file');
+            };
+            reader.readAsText(file);
+        }
+
+        // Close modal on click outside
+        window.onclick = (e) => {
+            const modal = document.getElementById('calculationModal');
+            if (e.target === modal) closeModal();
+        };
+
+        // ========================================================================
+        // DARK MODE TOGGLE
+        // ========================================================================
+
+        (function initTheme() {
+            const toggle = document.getElementById('themeToggle');
+            const root = document.documentElement;
+
+            // Check for saved preference or system preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                root.setAttribute('data-theme', savedTheme);
+            } else if (prefersDark) {
+                root.setAttribute('data-theme', 'dark');
+            }
+
+            // Toggle theme on button click
+            toggle.addEventListener('click', () => {
+                const currentTheme = root.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                if (newTheme === 'light') {
+                    root.removeAttribute('data-theme');
+                } else {
+                    root.setAttribute('data-theme', newTheme);
+                }
+
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // Listen for system preference changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    if (e.matches) {
+                        root.setAttribute('data-theme', 'dark');
+                    } else {
+                        root.removeAttribute('data-theme');
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

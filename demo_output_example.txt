@@ -1,0 +1,100 @@
+═════════════════════════════════════════════════════════════════
+IC++ PRICING BREAKDOWN ANALYSIS - TRANSPARENT COST BREAKDOWN
+═════════════════════════════════════════════════════════════════
+Total Transactions Processed: 150
+Transactions Skipped: 23
+═════════════════════════════════════════════════════════════════
+
+
+REGION: HONG KONG (HK)
+─────────────────────────────────────────────────────────────────
+Card Type: CC
+  Count: 65 | Volume: HK$125,000.00
+
+  Fee Breakdown:
+    IC (Interchange):           HK$1,250.00  (1.00%)
+    1st Plus (Scheme):            HK$250.00  (0.20%)
+    2nd Plus (Acquirer):          HK$625.00  (0.50%)
+      │
+      ├─ 2nd Plus Breakdown:
+      │  ├─ Gateway Fee                  HK$390.00  (0.312%)
+      │  ├─ Authorization Fee            HK$80.00   (0.064%)
+      │  ├─ Clearing Fee                 HK$60.00   (0.048%)
+      │  ├─ 3DS Fee                      HK$45.00   (0.036%)
+      │  └─ Net Acquirer Markup          HK$50.00   (0.040%)
+      │
+    ───────────────────────────────────────────────────────────
+    Total MDR:                  HK$2,125.00  (1.70%)
+
+
+REGION: MALAYSIA (MY)
+─────────────────────────────────────────────────────────────────
+Card Type: CC
+  Count: 38 | Volume: RM50,000.00
+
+  Fee Breakdown:
+    IC (Interchange):             RM500.00  (1.00%)
+    1st Plus (Scheme):              RM0.00  (0.00%)  ⚠️ MY Region
+    2nd Plus (Acquirer):           RM300.00  (0.60%)
+      │
+      ├─ 2nd Plus Breakdown:
+      │  ├─ Gateway Fee                  RM180.00   (0.360%)
+      │  ├─ Authorization Fee            RM40.00    (0.080%)
+      │  ├─ Clearing Fee                 RM30.00    (0.060%)
+      │  ├─ 3DS Fee                      RM20.00    (0.040%)
+      │  └─ Net Acquirer Markup          RM30.00    (0.060%)
+      │
+    ───────────────────────────────────────────────────────────
+    Total MDR:                    RM800.00  (1.60%)
+
+
+REGION: THAILAND (TH)
+─────────────────────────────────────────────────────────────────
+Card Type: CC
+  Count: 47 | Volume: ฿180,000.00
+
+  Fee Breakdown:
+    IC (Interchange):           ฿1,800.00  (1.00%)
+    1st Plus (Scheme):            ฿360.00  (0.20%)
+    2nd Plus (Acquirer):          ฿720.00  (0.40%)
+      │
+      ├─ 2nd Plus Breakdown:
+      │  ├─ Gateway Fee                  ฿450.00    (0.250%)
+      │  ├─ Authorization Fee            ฿90.00     (0.050%)
+      │  ├─ Clearing Fee                 ฿72.00     (0.040%)
+      │  ├─ Cross-Border Fee             ฿18.00     (0.010%)
+      │  ├─ 3DS Fee                      ฿36.00     (0.020%)
+      │  ├─ Tax Components:
+      │  │  ├─ VAT                       ฿18.00     (0.010%)
+      │  │  └─ WHT (Withholding Tax)     ฿9.00      (0.005%)
+      │  └─ Net Acquirer Markup          ฿27.00     (0.015%)
+      │
+    ───────────────────────────────────────────────────────────
+    Total MDR:                  ฿2,880.00  (1.60%)
+
+═════════════════════════════════════════════════════════════════
+
+KEY INSIGHTS:
+
+✓ TRANSPARENT COST BREAKDOWN - Every fee is itemized
+✓ Gateway Fee is clearly shown (3DS, Capture, Debit events from NomuPay docs)
+✓ Authorization & Clearing fees separated
+✓ Cross-border and currency conversion fees visible
+✓ Tax components (VAT, WHT, GRT, ST) tracked separately
+✓ Net Acquirer Markup = What's left after all known operational costs
+
+MALAYSIA SPECIAL CASE:
+⚠️ MY region shows 1st Plus (Scheme Fee) = 0 as expected
+⚠️ All scheme fees are absorbed into 2nd Plus for MY merchants
+
+CSV EXPORT COLUMNS:
+Region, CardType, TxnCount, TotalVolume, Currency,
+IC_Total, IC_Avg_Pct,
+FirstPlus_Total, FirstPlus_Avg_Pct,
+SecondPlus_Total, SecondPlus_Avg_Pct,
+GatewayFee_Total, AuthorizationFee_Total, ClearingFee_Total,
+CrossBorderFee_Total, CrossCurrencyFee_Total, PreauthFee_Total,
+ThreeDSFee_Total, NonThreeDSFee_Total,
+VAT_Total, WHT_Total, GRT_Total, ST_Total,
+NetAcquirerMarkup_Total,
+MDR_Total, MDR_Avg_Pct

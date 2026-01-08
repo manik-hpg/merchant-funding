@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:support.totalprocessing.com)",
+      "Bash(python3:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)",
+      "Bash(chmod:*)",
+      "Bash(cat:*)",
+      "Bash(open:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}
