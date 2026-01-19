@@ -2239,89 +2239,11 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                         .reduce((sum, type) => sum + stats[region][type].count, 0);
 
                     // Gateway Breakdown Logic
-                    let gatewayBreakdownHtml = '';
-                    let totalAllocatedGateway = 0;
-
-                    if (gatewayEvents && gatewayEvents.events && totalRegionSales > 0) {
-                        // Enforce Order: RG -> DB -> 3DS -> Others
-                        const sortOrder = ['rg', 'db', 'three_d', 'rf', 'cp'];
-                        const eventTypes = Object.keys(gatewayEvents.events).sort((a, b) => {
-                            const idxA = sortOrder.indexOf(a);
-                            const idxB = sortOrder.indexOf(b);
-                            // If both known, sort by index
-                            if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-                            // If one unknown, push to end
-                            if (idxA !== -1) return -1;
-                            if (idxB !== -1) return 1;
-                            // Both unknown, alphabetical
-                            return a.localeCompare(b);
-                        });
-
-                        const actualTotalGatewayFee = Math.abs(gatewayEvents.gateway);
-
-                        // Standard unit rates for weighting (fallback to USD if unknown)
-                        const unitRates = {
-                            'HKD': { rg: 0.40, db: 0.59, three_d: 0.59, rf: 0.59, cp: 0.59 },
-                            'MYR': { rg: 0.20, db: 0.31, three_d: 0.31, rf: 0.31, cp: 0.31 },
-                            'USD': { rg: 0.05, db: 0.08, three_d: 0.08, rf: 0.08, cp: 0.08 },
-                            'THB': { rg: 1.50, db: 2.50, three_d: 2.50, rf: 2.50, cp: 2.50 }
-                        };
-                        const currency = data.currency || 'USD';
-                        const rates = unitRates[currency] || unitRates['USD'];
-
-                        // Calculate weighted total to determine distribution
-                        let estimatedTotal = 0;
-                        eventTypes.forEach(evt => {
-                            const count = gatewayEvents.events[evt];
-                            // specific rate or default to DB rate for unknown events
-                            const rate = rates[evt] || rates['db'];
-                            estimatedTotal += count * rate;
-                        });
-
-                        // Adjustment factor to match actual total
-                        const factor = estimatedTotal > 0 ? (actualTotalGatewayFee / estimatedTotal) : 0;
-
-                        if (eventTypes.length > 0) {
-                            gatewayBreakdownHtml += '<div class="cost-breakdown-list" style="margin-top:4px; margin-bottom:4px; padding-left:8px; border-left: 2px solid rgba(255,255,255,0.2);">';
-
-                            eventTypes.forEach(evt => {
-                                const count = gatewayEvents.events[evt];
-                                if (count > 0) {
-                                    // Calculate cost share for this event type
-                                    const rate = rates[evt] || rates['db'];
-                                    const eventTotalCost = count * rate * factor;
-
-                                    // Allocate to this specific card bucket based on sales count
-                                    // (Cost per sale * number of sales in this bucket)
-                                    const costPerSale = eventTotalCost / totalRegionSales;
-                                    const allocated = costPerSale * data.count;
-                                    totalAllocatedGateway += allocated;
-
-                                    // Format event name
-                                    let label = evt;
-                                    if (evt.toLowerCase().includes('three')) label = '3DS (3D Secure)';
-                                    else if (evt.toLowerCase() === 'db') label = 'DB (Debit Auth)';
-                                    else if (evt.toLowerCase() === 'rg') label = 'RG (Registration)';
-                                    else if (evt.toLowerCase() === 'rf') label = 'RF (Refund)';
-                                    else if (evt.toLowerCase() === 'cp') label = 'CP (Capture)';
-
-                                    gatewayBreakdownHtml += `
-                                        <div style="display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,0.85); margin-bottom:2px;">
-                                            <span>${label}</span>
-                                            <span>${meta.symbol}${allocated.toFixed(2)} <span style="opacity:0.6">(${costPerSale.toFixed(2)}/txn)</span></span>
-                                        </div>
-                                    `;
-                                }
-                            });
-                            gatewayBreakdownHtml += '</div>';
-                        }
-                    }
-
                     // Payout Load Fee Logic (Estimated 0.15% of Volume)
                     const payoutLoadEst = Math.abs(data.volume) * 0.0015;
 
-                    // Combined Total
-                    const combinedTotalCost = Math.abs(data.totalFees) + totalAllocatedGateway + payoutLoadEst;
+                    // Combined Total (Sales Fees + Payout Load only)
+                    const combinedTotalCost = Math.abs(data.totalFees) + payoutLoadEst;
 
                     card.innerHTML = `
                         <div class="card-clickable-indicator">👆 Click for ${data.count} txn${data.count > 1 ? 's' : ''}</div>
@@ -2411,26 +2333,15 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                             <div class="total-value">${meta.symbol}${Math.abs(data.totalFees).toFixed(2)} (${totalFeesPct.toFixed(2)}%)</div>
                         </div>
 
-                        ${gatewayEvents && Math.abs(gatewayEvents.gateway) > 0.001 ? `
-                        <div class="total-section" style="background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%); margin-top: 8px;">
-                            <div class="total-label" style="color: rgba(255,255,255,0.9); margin-bottom: 2px;">+ Gateway (Allocated) <span class="info-icon" style="background:rgba(255,255,255,0.2);color:white" title="Allocated based on region volume">i</span></div>
-                            ${gatewayBreakdownHtml}
-                            <div style="border-top: 1px solid rgba(255,255,255,0.3); margin-top: 4px; padding-top: 4px; display:flex; justify-content:space-between; font-weight:600;">
-                                <span>Subtotal</span>
-                                <div>${meta.symbol}${totalAllocatedGateway.toFixed(2)}</div>
-                            </div>
-                        </div>
-
                         <div class="total-section" style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); margin-top: 4px;">
                             <div class="total-label" style="color: rgba(255,255,255,0.9);">+ Payout Load (Est. 0.15%)</div>
                             <div class="total-value">${meta.symbol}${payoutLoadEst.toFixed(2)}</div>
                         </div>
 
                         <div class="total-section" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); margin-top: 4px;">
-                            <div class="total-label" style="color: rgba(255,255,255,0.9);">💰 Total Cost (All Incl.)</div>
+                            <div class="total-label" style="color: rgba(255,255,255,0.9);">💰 Total Cost (Sales + Payout)</div>
                             <div class="total-value">${meta.symbol}${combinedTotalCost.toFixed(2)} (${(combinedTotalCost / data.volume * 100).toFixed(2)}%)</div>
                         </div>
-                        ` : ''}
                     `;
 
                     // Add click handler for drill-down (but not for info icons)
@@ -2471,16 +2382,69 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                             </div>
                         </div>
 
-                        <div class="fee-breakdown">
                             <p style="font-size: 13px; margin-bottom: 15px;">These are <strong>fixed per-event fees</strong> billed separately from Sale transactions:</p>
-                            ${Object.keys(events).filter(k => events[k] > 0).map(eventType => `
-                                <div class="fee-tree-item">
-                                    <div class="fee-tree-label">
-                                        <span class="fee-tree-icon">├─</span> ${EVENT_TYPES[eventType] || eventType}
-                                    </div>
-                                    <div class="fee-tree-amount" style="font-weight: 600;">${events[eventType]} events</div>
-                                </div>
-                            `).join('')}
+                            ${(() => {
+                            // Calculate weighted costs for Gateway Events Card
+                            let breakdown = '';
+                            if (gatewayEvents && gatewayEvents.events) {
+                                const sortOrder = ['rg', 'db', 'three_d', 'rf', 'cp'];
+                                const eventTypes = Object.keys(events).sort((a, b) => {
+                                    const idxA = sortOrder.indexOf(a);
+                                    const idxB = sortOrder.indexOf(b);
+                                    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                                    if (idxA !== -1) return -1;
+                                    if (idxB !== -1) return 1;
+                                    return a.localeCompare(b);
+                                });
+
+                                // Unit rates (copied from logic, could be shared)
+                                const unitRates = {
+                                    'HKD': { rg: 0.40, db: 0.59, three_d: 0.59, rf: 0.59, cp: 0.59 },
+                                    'MYR': { rg: 0.20, db: 0.31, three_d: 0.31, rf: 0.31, cp: 0.31 },
+                                    'USD': { rg: 0.05, db: 0.08, three_d: 0.08, rf: 0.08, cp: 0.08 },
+                                    'THB': { rg: 1.50, db: 2.50, three_d: 2.50, rf: 2.50, cp: 2.50 }
+                                };
+                                // Determine currency from one of the sales cards for this region, or default
+                                let currency = 'USD';
+                                const cardKeys = Object.keys(stats[region]).filter(k => k !== '_gatewayEvents');
+                                if (cardKeys.length > 0) {
+                                    currency = stats[region][cardKeys[0]].currency || 'USD';
+                                }
+                                const rates = unitRates[currency] || unitRates['USD'];
+
+                                let estimatedTotal = 0;
+                                eventTypes.forEach(evt => {
+                                    const count = events[evt];
+                                    const rate = rates[evt] || rates['db'];
+                                    estimatedTotal += count * rate;
+                                });
+
+                                const actualTotalGatewayFee = Math.abs(gatewayEvents.gateway);
+                                const factor = estimatedTotal > 0 ? (actualTotalGatewayFee / estimatedTotal) : 0;
+
+                                breakdown = eventTypes.filter(k => events[k] > 0).map(eventType => {
+                                    const count = events[eventType];
+                                    const rate = rates[eventType] || rates['db'];
+                                    const realCost = count * rate * factor;
+                                    const costPerEvent = realCost / count;
+
+                                    let label = EVENT_TYPES[eventType] || eventType;
+
+                                    return `
+                                            <div class="fee-tree-item">
+                                                <div class="fee-tree-label">
+                                                    <span class="fee-tree-icon">├─</span> ${label}
+                                                </div>
+                                                <div class="fee-tree-amount" style="text-align: right;">
+                                                    <div style="font-weight: 600;">${meta.symbol}${realCost.toFixed(2)}</div>
+                                                    <div style="font-size: 11px; opacity: 0.7;">${count} @ ${meta.symbol}${costPerEvent.toFixed(2)}</div>
+                                                </div>
+                                            </div>
+                                        `;
+                                }).join('');
+                            }
+                            return breakdown;
+                        })()}
                         </div>
 
                         <div class="total-section">
