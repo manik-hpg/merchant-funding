@@ -2243,7 +2243,20 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                     let totalAllocatedGateway = 0;
 
                     if (gatewayEvents && gatewayEvents.events && totalRegionSales > 0) {
-                        const eventTypes = Object.keys(gatewayEvents.events);
+                        // Enforce Order: RG -> DB -> 3DS -> Others
+                        const sortOrder = ['rg', 'db', 'three_d', 'rf', 'cp'];
+                        const eventTypes = Object.keys(gatewayEvents.events).sort((a, b) => {
+                            const idxA = sortOrder.indexOf(a);
+                            const idxB = sortOrder.indexOf(b);
+                            // If both known, sort by index
+                            if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                            // If one unknown, push to end
+                            if (idxA !== -1) return -1;
+                            if (idxB !== -1) return 1;
+                            // Both unknown, alphabetical
+                            return a.localeCompare(b);
+                        });
+
                         const actualTotalGatewayFee = Math.abs(gatewayEvents.gateway);
 
                         // Standard unit rates for weighting (fallback to USD if unknown)
@@ -2561,6 +2574,14 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
             let calculatedRgCost = (rates.rg || 0) * scalingFactor;
             let calculatedDbCost = (rates.db || 0) * scalingFactor;
             let calculated3dsCost = (rates.tds || 0) * scalingFactor;
+
+            // ADJUSTMENT: Multiply by Frequency to show "Average Cost Per Transaction"
+            // This ensures Top Card matches the "Allocated" Region Card values
+            if (txnCount > 0) {
+                calculatedRgCost *= (totalRg / txnCount);
+                calculatedDbCost *= (totalDb / txnCount);
+                calculated3dsCost *= (total3ds / txnCount);
+            }
 
             // If we have data, we are showing calculated values
             let dataSource = hasGatewayData ? 'calculated' : 'estimated';
