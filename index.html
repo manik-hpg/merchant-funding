@@ -13,83 +13,117 @@
            CSS CUSTOM PROPERTIES (DESIGN TOKENS)
            ======================================================================== */
         :root {
-            /* Base colors */
-            --bg-primary: #F5F5F5;
-            --bg-secondary: #fafafa;
+            /* Base colors - Modern Light Theme */
+            --bg-primary: #f8fafc;
+            /* Slate 50 */
+            --bg-secondary: #ffffff;
             --bg-card: #ffffff;
-            --bg-overlay: rgba(0, 0, 0, 0.8);
-            --bg-modal-overlay: rgba(0, 0, 0, 0.5);
+            --bg-overlay: rgba(15, 23, 42, 0.6);
+            /* Slate 900, opacity */
+            --bg-modal-overlay: rgba(15, 23, 42, 0.4);
 
             /* Text colors */
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --text-muted: #888888;
+            --text-primary: #0f172a;
+            /* Slate 900 */
+            --text-secondary: #475569;
+            /* Slate 600 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
             --text-inverted: #ffffff;
 
             /* Brand colors */
-            --brand-primary: #ff9e0c;
-            --brand-secondary: #212121;
-            --brand-tertiary: #7e7e7e;
+            --brand-primary: #f97316;
+            /* Orange 500 - slightly more vibrant */
+            --brand-secondary: #1e293b;
+            /* Slate 800 */
+            --brand-tertiary: #64748b;
+            /* Slate 500 */
 
             /* UI colors */
-            --border-color: #f0f0f0;
-            --border-color-strong: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --shadow-color-strong: rgba(0, 0, 0, 0.15);
-            --shadow-color-heavy: rgba(0, 0, 0, 0.2);
+            --border-color: #e2e8f0;
+            /* Slate 200 */
+            --border-color-strong: #cbd5e1;
+            /* Slate 300 */
+            --shadow-color: rgba(15, 23, 42, 0.05);
+            --shadow-color-strong: rgba(15, 23, 42, 0.1);
+            --shadow-color-heavy: rgba(15, 23, 42, 0.15);
 
             /* Status colors */
-            --success-color: #4caf50;
-            --warning-color: #ffc107;
-            --warning-bg: #fff3cd;
-            --error-color: #f5576c;
+            --success-color: #10b981;
+            /* Emerald 500 */
+            --warning-color: #f59e0b;
+            /* Amber 500 */
+            --warning-bg: #fffbeb;
+            /* Amber 50 */
+            --error-color: #ef4444;
+            /* Red 500 */
 
             /* Accent/tag colors */
-            --tag-bg: rgba(255, 158, 12, 0.1);
-            --tag-text: #5e35b1;
+            --tag-bg: rgba(249, 115, 22, 0.1);
+            --tag-text: #c2410c;
+            /* Orange 700 */
 
             /* Component-specific */
             --input-bg: #ffffff;
-            --fee-bar-bg: #f0f0f0;
-            --fee-tree-border: #e0e0e0;
-            --spinner-track: #f3f3f3;
+            --fee-bar-bg: #e2e8f0;
+            --fee-tree-border: #cbd5e1;
+            --spinner-track: #e2e8f0;
+            --card-border: transparent;
+            /* No border in light mode usually */
 
             /* Transitions */
             --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Dark Mode Overrides */
+        /* Dark Mode Overrides - Modern Zinc/Slate Theme */
         [data-theme="dark"] {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #0f3460;
-            --bg-overlay: rgba(0, 0, 0, 0.9);
-            --bg-modal-overlay: rgba(0, 0, 0, 0.7);
+            --bg-primary: #09090b;
+            /* Zinc 950 */
+            --bg-secondary: #27272a;
+            /* Zinc 800 */
+            --bg-card: #18181b;
+            /* Zinc 900 */
+            --bg-overlay: rgba(0, 0, 0, 0.85);
+            --bg-modal-overlay: rgba(0, 0, 0, 0.85);
 
-            --text-primary: #e8e8e8;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --text-inverted: #1a1a2e;
+            --text-primary: #f4f4f5;
+            /* Zinc 100 */
+            --text-secondary: #d4d4d8;
+            /* Zinc 300 (was Zinc 400) */
+            --text-muted: #a1a1aa;
+            /* Zinc 400 (was Zinc 500) */
+            --text-inverted: #ffffff;
+            /* Fixed: White text on dark backgrounds */
 
-            --brand-secondary: #e94560;
-            --brand-tertiary: #a0a0a0;
+            --brand-secondary: #27272a;
+            /* Zinc 800 */
+            --brand-tertiary: #52525b;
+            /* Zinc 600 */
 
-            --border-color: #2a2a4a;
-            --border-color-strong: #3a3a5a;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --shadow-color-strong: rgba(0, 0, 0, 0.4);
-            --shadow-color-heavy: rgba(0, 0, 0, 0.5);
+            --border-color: #27272a;
+            /* Zinc 800 */
+            --border-color-strong: #3f3f46;
+            /* Zinc 700 */
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --shadow-color-strong: rgba(0, 0, 0, 0.7);
+            --shadow-color-heavy: rgba(0, 0, 0, 0.9);
 
-            --success-color: #66bb6a;
-            --warning-bg: #3d3929;
+            --success-color: #34d399;
+            /* Emerald 400 */
+            --warning-bg: #451a03;
+            /* Amber 950 (darker) */
 
-            --tag-bg: rgba(255, 158, 12, 0.2);
-            --tag-text: #bb86fc;
+            --tag-bg: rgba(249, 115, 22, 0.15);
+            --tag-text: #fdba74;
+            /* Orange 300 */
 
-            --input-bg: #16213e;
-            --fee-bar-bg: #2a2a4a;
-            --fee-tree-border: #3a3a5a;
-            --spinner-track: #2a2a4a;
+            --input-bg: #09090b;
+            /* Darker than card */
+            --fee-bar-bg: #27272a;
+            --fee-tree-border: #3f3f46;
+            --spinner-track: #27272a;
+            --card-border: 1px solid #27272a;
+            /* Subtle border for definition */
         }
 
         /* ========================================================================
@@ -104,6 +138,8 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg-primary);
+            background-image: radial-gradient(circle at 50% 0%, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+            background-attachment: fixed;
             padding: 40px 20px;
             color: var(--text-primary);
             min-height: 100vh;
@@ -181,6 +217,8 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px var(--shadow-color);
+            border: var(--card-border);
+            /* Added for dark mode definition */
             max-width: 800px;
             margin: 0 auto 40px auto;
             transition: var(--theme-transition);
@@ -205,28 +243,49 @@
 
         #presetSelector {
             width: 100%;
-            padding: 12px;
-            border: 2px solid var(--brand-primary);
+            padding: 14px 16px;
+            /* Larger target */
+            border: 1px solid var(--border-color-strong);
+            /* Softer border initially */
             border-radius: 8px;
             font-size: 15px;
             background: var(--input-bg);
             color: var(--text-primary);
             cursor: pointer;
-            transition: var(--theme-transition);
+            transition: var(--theme-transition), border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        #presetSelector:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px var(--tag-bg);
         }
 
         #loadPresetBtn {
             margin-top: 10px;
             width: 100%;
             padding: 12px;
-            background: var(--brand-primary);
-            color: var(--brand-secondary);
+            background: linear-gradient(135deg, var(--brand-primary), #ea580c);
+            /* Gradient */
+            color: #ffffff;
             border: none;
             border-radius: 8px;
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(249, 115, 22, 0.25);
+        }
+
+        #loadPresetBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
+            filter: brightness(1.1);
         }
 
         [data-theme="dark"] #loadPresetBtn {
@@ -249,13 +308,14 @@
         }
 
         .drop-zone {
-            border: 3px dashed var(--brand-primary);
+            border: 2px dashed var(--border-color-strong);
+            /* Softer initial state */
             border-radius: 12px;
             padding: 40px;
             text-align: center;
             background: var(--bg-secondary);
             cursor: pointer;
-            transition: var(--theme-transition);
+            transition: var(--theme-transition), transform 0.2s, border-color 0.2s;
         }
 
         .drop-zone p {
@@ -302,9 +362,14 @@
             background: var(--bg-card);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px var(--shadow-color);
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color-strong);
+            border: var(--card-border);
             text-align: center;
-            transition: var(--theme-transition);
+            transition: var(--theme-transition), transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
         }
 
         .stat-card h3 {
@@ -333,8 +398,9 @@
             background: var(--bg-card);
             border-radius: 20px;
             padding: 35px;
-            box-shadow: 0 15px 40px var(--shadow-color-strong);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color-strong);
+            border: var(--card-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .region-card:hover {
@@ -369,11 +435,88 @@
 
         .region-code {
             background: var(--brand-primary);
-            color: var(--text-inverted);
-            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--brand-primary), #ea580c);
+            color: #ffffff;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        /* Gateway Card Styles */
+        .gateway-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%) !important;
+            border: 1px solid #ffd54f !important;
+        }
+
+        .gateway-card .region-stats {
+            background: rgba(255, 255, 255, 0.5) !important;
+            color: #856404;
+        }
+
+        .gateway-card .region-code {
+            background: #856404 !important;
+            box-shadow: none;
+        }
+
+        .gateway-card .fee-tree-item {
+            background: rgba(255, 255, 255, 0.6) !important;
+            color: #5d4e0f;
+        }
+
+        .gateway-card .total-section {
+            background: #856404 !important;
+            color: #fff !important;
+        }
+
+        .gateway-card .region-name,
+        .gateway-card .region-stat-value,
+        .gateway-card .region-stat-label,
+        .gateway-card .fee-tree-label,
+        .gateway-card .fee-tree-amount {
+            color: #5d4e0f !important;
+        }
+
+        [data-theme="dark"] .gateway-card {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
+            border: 1px solid #92400e !important;
+        }
+
+        [data-theme="dark"] .gateway-card .region-stats {
+            background: rgba(0, 0, 0, 0.3) !important;
+            color: #fcd34d;
+        }
+
+        [data-theme="dark"] .gateway-card .region-code {
+            background: #f59e0b !important;
+            color: #000 !important;
+        }
+
+        [data-theme="dark"] .gateway-card .fee-tree-item {
+            background: rgba(0, 0, 0, 0.3) !important;
+            color: #fbbf24;
+        }
+
+        [data-theme="dark"] .gateway-card .total-section {
+            background: #b45309 !important;
+            color: #fff !important;
+        }
+
+        [data-theme="dark"] .gateway-card .region-name,
+        [data-theme="dark"] .gateway-card .region-stat-value {
+            color: #feb272 !important;
+        }
+
+        [data-theme="dark"] .gateway-card .region-stat-label,
+        [data-theme="dark"] .gateway-card .fee-tree-label,
+        [data-theme="dark"] .gateway-card .fee-tree-amount {
+            color: #fdba74 !important;
+        }
+
+        [data-theme="dark"] .gateway-card p {
+            color: #fdba74 !important;
         }
 
         .region-stats {
@@ -545,6 +688,36 @@
             color: var(--text-primary);
         }
 
+        .fee-tree-item.is-total {
+            font-weight: bold;
+            background: #e8f5e9;
+        }
+
+        .fee-tree-item.is-highlight {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+        }
+
+        .fee-tree-breakdown {
+            font-size: 11px;
+            margin-top: 4px;
+            font-style: italic;
+            color: #856404;
+        }
+
+        [data-theme="dark"] .fee-tree-item.is-total {
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        [data-theme="dark"] .fee-tree-item.is-highlight {
+            background: rgba(234, 179, 8, 0.15);
+            border-left: 3px solid #facc15;
+        }
+
+        [data-theme="dark"] .fee-tree-breakdown {
+            color: #fcd34d;
+        }
+
         .total-section {
             margin-top: 25px;
             padding: 20px;
@@ -583,6 +756,7 @@
 
         .loading-overlay.active {
             display: flex;
+            backdrop-filter: blur(5px);
         }
 
         .loading-content {
@@ -591,6 +765,7 @@
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 20px 60px var(--shadow-color-heavy);
+            border: var(--card-border);
             transition: var(--theme-transition);
         }
 
@@ -650,7 +825,8 @@
             border-radius: 15px;
             max-width: 700px;
             max-height: 85vh;
-            box-shadow: 0 20px 60px var(--shadow-color-heavy);
+            box-shadow: 0 25px 50px -12px var(--shadow-color-heavy);
+            border: var(--card-border);
             animation: slideDown 0.3s;
             display: flex;
             flex-direction: column;
@@ -811,6 +987,281 @@
                 margin-bottom: 20px;
             }
         }
+
+        /* Transaction Drill-down Modal */
+        .transactions-modal .modal-content {
+            max-width: 900px;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transactions-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .transactions-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .transactions-table tbody tr:hover {
+            background: var(--tag-bg);
+        }
+
+        .transactions-table .amount {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .transactions-table .positive {
+            color: var(--success-color);
+        }
+
+        .transactions-table .negative {
+            color: var(--error-color);
+        }
+
+        .txn-id {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .txn-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .txn-badge.visa {
+            background: linear-gradient(135deg, #1a1f71, #2557d6);
+            color: white;
+        }
+
+        .txn-badge.mc {
+            background: linear-gradient(135deg, #eb001b, #f79e1b);
+            color: white;
+        }
+
+        .txn-badge.other {
+            background: var(--brand-secondary);
+            color: white;
+        }
+
+        .card-clickable-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--brand-primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0.9;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .region-card.has-transactions {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .region-card.has-transactions:hover .card-clickable-indicator {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .transactions-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .transactions-summary-item {
+            text-align: center;
+        }
+
+        .transactions-summary-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .transactions-summary-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        /* Transaction Cost Summary Section */
+        .transaction-cost-summary {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 2px solid transparent;
+            background-image: linear-gradient(var(--bg-card), var(--bg-card)),
+                linear-gradient(135deg, var(--brand-primary), #ea580c, #dc2626);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: var(--theme-transition);
+        }
+
+        .transaction-cost-summary h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-cost-summary h2 .icon {
+            font-size: 28px;
+        }
+
+        .cost-breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .cost-category {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+            transition: var(--theme-transition);
+        }
+
+        .cost-category h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brand-primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+        }
+
+        .cost-item-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cost-item-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cost-item.subtotal {
+            margin-top: 12px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border-color);
+            border-bottom: none;
+        }
+
+        .cost-item.subtotal .cost-item-label {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .cost-item.subtotal .cost-item-value {
+            font-size: 18px;
+            color: var(--brand-primary);
+        }
+
+        .total-cost-box {
+            background: linear-gradient(135deg, var(--brand-secondary), #374151);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--text-inverted);
+            text-align: center;
+        }
+
+        .total-cost-box h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .total-cost-value {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .total-cost-subtext {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .cost-formula {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            border-left: 4px solid var(--brand-primary);
+        }
     </style>
 </head>
 
@@ -818,8 +1269,24 @@
     <div class="container">
         <div class="header">
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                <span class="icon-sun">☀️</span>
-                <span class="icon-moon">🌙</span>
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="color: #ff9e0c;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="color: #ffffff;">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
             </button>
             <h1>💳 IC++ Pricing Breakdown</h1>
             <p>Interactive Cost Analysis - Upload CSV or Load Sample Data</p>
@@ -845,7 +1312,7 @@
             </div>
 
             <div class="divider">
-                <span style="background: white; padding: 0 15px;">OR</span>
+                <span style="background: var(--bg-card); padding: 0 15px;">OR</span>
             </div>
 
             <!-- File Upload -->
@@ -876,7 +1343,7 @@
                     style="font-size: 18px; font-weight: 600; color: #ff9e0c; cursor: pointer; margin-bottom: 15px;">
                     ℹ️ Why are transactions skipped? (Click to expand)
                 </summary>
-                <div style="padding: 20px; background: #fafafa; border-radius: 8px; line-height: 1.8;">
+                <div style="padding: 20px; background: var(--bg-secondary); border-radius: 8px; line-height: 1.8;">
                     <p style="margin-bottom: 15px;"><strong>IC++ pricing applies ONLY to customer sales
                             transactions.</strong> The following are automatically excluded from IC++ analysis:</p>
 
@@ -907,7 +1374,7 @@
                     </div>
 
                     <div
-                        style="margin-top: 20px; padding: 15px; background: white; border-left: 4px solid #4caf50; border-radius: 4px;">
+                        style="margin-top: 20px; padding: 15px; background: var(--bg-card); border-left: 4px solid #4caf50; border-radius: 4px;">
                         <strong>✓ What IS analyzed:</strong> Approved Sale transactions with positive amounts<br>
                         <strong style="color: #ff9e0c;">These are the actual customer purchases</strong> that IC++
                         pricing applies to.
@@ -919,6 +1386,77 @@
         <!-- Stats Overview -->
         <div class="stats-overview" id="statsOverview">
             <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Transaction Cost Summary -->
+        <div class="transaction-cost-summary" id="transactionCostSummary">
+            <h2><span class="icon">💰</span> Total Transaction Fees Summary <span id="costSummaryDataSource"
+                    style="font-size: 14px; font-weight: 400; background: var(--warning-bg); padding: 4px 10px; border-radius: 12px; margin-left: 10px;">📐
+                    Estimated in USD (load data for actual)</span></h2>
+            <div class="cost-breakdown-grid">
+                <!-- Gateway Event Costs -->
+                <div class="cost-category">
+                    <h3>⚙️ Gateway Event Costs <span style="font-size: 11px; font-weight: 400; opacity: 0.7;">(per
+                            typical transaction)</span></h3>
+                    <div class="cost-item">
+                        <span class="cost-item-label">
+                            <span>🔑</span> Registration (RG)
+                        </span>
+                        <span class="cost-item-value" id="costRg">~$0.05 <span
+                                style="font-size: 11px; color: var(--text-muted);">📐</span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-item-label">
+                            <span>💳</span> Debit Auth (DB)
+                        </span>
+                        <span class="cost-item-value" id="costDb">~$0.08 <span
+                                style="font-size: 11px; color: var(--text-muted);">📐</span></span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-item-label">
+                            <span>🔐</span> 3D Secure (3DS)
+                        </span>
+                        <span class="cost-item-value" id="cost3ds">~$0.08 <span
+                                style="font-size: 11px; color: var(--text-muted);">📐</span></span>
+                    </div>
+                    <div class="cost-item subtotal">
+                        <span class="cost-item-label">Gateway Subtotal (1 RG + 1 DB + 1 3DS)</span>
+                        <span class="cost-item-value" id="costGatewaySubtotal">~$0.21 <span
+                                style="font-size: 11px; color: var(--text-muted);">📐</span></span>
+                    </div>
+                </div>
+
+                <!-- Payout Fees -->
+                <div class="cost-category">
+                    <h3>📤 Payout Load Fee <span
+                            style="font-size: 11px; font-weight: 400; opacity: 0.7;">(assumed)</span></h3>
+                    <div class="cost-item">
+                        <span class="cost-item-label">
+                            <span>📦</span> Load Fee Rate
+                        </span>
+                        <span class="cost-item-value" id="costLoadRate">~0.15% <span
+                                style="font-size: 11px; color: var(--text-muted);">📐</span></span>
+                    </div>
+                    <div class="cost-item subtotal">
+                        <span class="cost-item-label">Variable Fee Formula</span>
+                        <span class="cost-item-value">0.15% × Payout</span>
+                    </div>
+                </div>
+
+                <!-- Total Cost Box -->
+                <div class="total-cost-box">
+                    <h3>📊 Fixed Cost Per Transaction</h3>
+                    <div class="total-cost-value" id="costTotalFixed">~$0.21</div>
+                    <div class="total-cost-subtext" id="costTotalPct">
+                        Load CSV to see % of avg transaction
+                    </div>
+                </div>
+            </div>
+
+            <div class="cost-formula" id="costFormula">
+                📐 <strong>Legend:</strong> 📐 = Estimated/Assumed • 📊 = Calculated from CSV data<br>
+                💡 <strong>Total Cost</strong> = Gateway (~$0.21 fixed) + Load Fee (0.15% × Amount) + IC++ Fees
+            </div>
         </div>
 
         <!-- Regions Grid -->
@@ -950,6 +1488,19 @@
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions Drill-down Modal -->
+    <div id="transactionsModal" class="modal transactions-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="transactionsModalTitle">Transactions</h2>
+                <span class="close" onclick="closeTransactionsModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="transactionsModalBody">
                 <!-- Content will be inserted by JavaScript -->
             </div>
         </div>
@@ -1114,38 +1665,52 @@ WHERE Account name contains "${region}"
                 content = `
                     <div class="calculation-section">
                         <h3>📊 Data Source</h3>
-                        <p>This value comes from the NomuPay Daily Funding Report CSV file.</p>
+                        <p>Per <a href="https://support.totalprocessing.com/hc/en-gb/articles/41787708534289-Funding-Report" target="_blank" style="color: var(--brand-primary);">NomuPay documentation</a>, these fees are "due to the scheme":</p>
                         <div class="calc-row">
-                            <span class="calc-label">CSV Column:</span>
+                            <span class="calc-label">Scheme Fee Bucket:</span>
                             <span class="calc-value"><span class="column-tag">Scheme Fee Bucket Amount</span></span>
                         </div>
                         <div class="calc-row">
-                            <span class="calc-label">Column Number:</span>
-                            <span class="calc-value">50</span>
+                            <span class="calc-label">Authorization Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Authorization Amount</span></span>
                         </div>
                         <div class="calc-row">
-                            <span class="calc-label">Region Filter:</span>
-                            <span class="calc-value">${region}</span>
+                            <span class="calc-label">Clearing Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Clearing Amount</span> - "Fee due to the scheme for each financial transaction"</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Cross-Border Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Cross Border Amount</span> - "Fee is due to the scheme"</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Cross-Currency Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Cross Currency Amount</span> - "Fee due to the scheme"</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Pre-Auth Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Preauthorization Amount</span> - "Fee due to the scheme"</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">3DS Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Three Ds Amount</span> - "Fee due to the scheme for 3D Secure"</span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="calc-label">Non-3DS Fee:</span>
+                            <span class="calc-value"><span class="column-tag">Non Three Ds Amount</span> - "Fee is due to the scheme for insecure transaction"</span>
                         </div>
                     </div>
 
                     <div class="calculation-section">
                         <h3>🔢 Calculation Method</h3>
                         <div class="formula-box">
-1st Plus Total = SUM(Scheme Fee Bucket Amount)
-WHERE Account name contains "${region}"
-  AND Card Type = "${cardType}"</div>
+1st Plus = Scheme Fee Bucket + Auth + Clearing + 
+           Cross-Border + Cross-Currency + Pre-Auth +
+           3DS Fee + Non-3DS Fee</div>
                     </div>
 
                     <div class="calculation-section">
                         <h3>💡 What is 1st Plus (Scheme Fee)?</h3>
-                        <p>The Scheme Fee is charged by card networks (Visa, Mastercard, etc.) for:</p>
-                        <ul>
-                            <li>Processing transactions through their network</li>
-                            <li>Authorization and clearing services</li>
-                            <li>Network maintenance and security</li>
-                            <li>Cross-border transaction processing</li>
-                        </ul>
+                        <p>Fees charged by card networks (Visa, Mastercard) for using their infrastructure. Per NomuPay docs, all the above fees are "due to the scheme".</p>
                     </div>
                 `;
             } else if (feeType === 'second') {
@@ -1153,87 +1718,43 @@ WHERE Account name contains "${region}"
                 content = `
                     <div class="calculation-section">
                         <h3>📊 Data Source</h3>
-                        <p>This is a <strong>calculated value</strong> derived from multiple CSV columns.</p>
-                    </div>
-
-                    <div class="calculation-section">
-                        <h3>🔢 Primary Formula</h3>
-                        <div class="formula-box">
-2nd Plus = MDR - IC - 1st Plus</div>
-                        <p>Where:</p>
+                        <p>The acquirer's own fees and taxes. Per <a href="https://support.totalprocessing.com/hc/en-gb/articles/41787708534289-Funding-Report" target="_blank" style="color: var(--brand-primary);">NomuPay documentation</a>, only these are NOT "due to the scheme":</p>
                         <div class="calc-row">
-                            <span class="calc-label">MDR:</span>
-                            <span class="calc-value"><span class="column-tag">MDR Amount</span> (Col 36)</span>
+                            <span class="calc-label">MDR Amount:</span>
+                            <span class="calc-value"><span class="column-tag">MDR Amount</span> - Merchant Discount Rate (acquirer markup)</span>
                         </div>
-                        <div class="calc-row">
-                            <span class="calc-label">IC:</span>
-                            <span class="calc-value"><span class="column-tag">Interchange Amount</span> (Col 38)</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">1st Plus:</span>
-                            <span class="calc-value"><span class="column-tag">Scheme Fee Bucket Amount</span> (Col 50)</span>
-                        </div>
-                    </div>
-
-                    <div class="calculation-section">
-                        <h3>🔧 2nd Plus Components Breakdown</h3>
-                        <p>The 2nd Plus is broken down into these CSV columns:</p>
                         <div class="calc-row">
                             <span class="calc-label">Gateway Fee:</span>
-                            <span class="calc-value"><span class="column-tag">Gateway Fee Amount</span> (Col 56)</span>
+                            <span class="calc-value"><span class="column-tag">Gateway Fee Amount</span> - Per-event processing fees</span>
                         </div>
                         <div class="calc-row">
-                            <span class="calc-label">Authorization:</span>
-                            <span class="calc-value"><span class="column-tag">Authorization Amount</span> (Col 44)</span>
+                            <span class="calc-label">Taxes:</span>
+                            <span class="calc-value">VAT, WHT, GRT, ST (country-specific)</span>
                         </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Clearing:</span>
-                            <span class="calc-value"><span class="column-tag">Clearing Amount</span> (Col 46)</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">Cross-Border:</span>
-                            <span class="calc-value"><span class="column-tag">Cross Border Amount</span> (Col 40)</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">3DS Fee:</span>
-                            <span class="calc-value"><span class="column-tag">Three Ds Amount</span> (Col 54)</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">VAT:</span>
-                            <span class="calc-value"><span class="column-tag">VAT Amount</span> (Col 60)</span>
-                        </div>
-                        <div class="calc-row">
-                            <span class="calc-label">WHT:</span>
-                            <span class="calc-value"><span class="column-tag">WHT Amount</span> (Col 64)</span>
-                        </div>
+                    </div>
+
+                    <div class="calculation-section">
+                        <h3>🔢 Calculation Method</h3>
+                        <div class="formula-box">
+2nd Plus = MDR Amount + Gateway Fee + Taxes (VAT, WHT, GRT, ST)</div>
                     </div>
 
                     <div class="calculation-section">
                         <h3>💰 Net Acquirer Markup</h3>
                         <div class="formula-box">
-Net Markup = 2nd Plus - (
-  Gateway Fee +
-  Authorization Fee +
-  Clearing Fee +
-  Cross-Border Fee +
-  Cross-Currency Fee +
-  3DS Fee +
-  Taxes
-)</div>
-                        <p>This is the <strong>pure profit margin</strong> retained by the acquirer after all operational costs.</p>
+Net Markup = MDR - Gateway Fee - Taxes</div>
+                        <p>This is the <strong>pure profit margin</strong> retained by the acquirer.</p>
                     </div>
 
                     <div class="calculation-section">
                         <h3>💡 What is 2nd Plus (Acquirer Markup)?</h3>
-                        <p>The Acquirer Markup covers:</p>
+                        <p>The acquirer's own charges for:</p>
                         <ul>
-                            <li>Gateway processing fees (3DS, Capture, Debit, Refund events)</li>
-                            <li>Authorization and clearing operational costs</li>
-                            <li>Risk management and fraud prevention</li>
-                            <li>Cross-border and currency conversion handling</li>
-                            <li>Taxes (VAT, WHT, GRT, ST)</li>
-                            <li>Acquirer profit margin</li>
+                            <li>MDR (Merchant Discount Rate) - acquirer profit margin</li>
+                            <li>Gateway processing fees for transaction events</li>
+                            <li>Applicable taxes (VAT, WHT, GRT, ST)</li>
                         </ul>
+                        <p style="margin-top: 15px; font-style: italic; color: var(--text-muted);">Note: Scheme-related fees (3DS, Cross-Border, etc.) are now in 1st Plus per NomuPay documentation.</p>
                     </div>
                 `;
             } else if (feeType === 'mdr') {
@@ -1290,6 +1811,117 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
 
         function closeModal() {
             document.getElementById('calculationModal').classList.remove('active');
+        }
+
+        // Global storage for current stats (for drill-down access)
+        let currentStats = null;
+
+        function showTransactionsModal(region, cardType) {
+            if (!currentStats || !currentStats[region] || !currentStats[region][cardType]) {
+                return;
+            }
+
+            const data = currentStats[region][cardType];
+            const transactions = data.transactions || [];
+            const meta = regionMeta[region] || regionMeta['UNKNOWN'];
+
+            const modal = document.getElementById('transactionsModal');
+            const modalTitle = document.getElementById('transactionsModalTitle');
+            const modalBody = document.getElementById('transactionsModalBody');
+
+            modalTitle.textContent = `📋 ${meta.name} (${region}) - ${cardType} Transactions`;
+
+            if (transactions.length === 0) {
+                modalBody.innerHTML = '<div class="no-transactions">No transactions found</div>';
+                modal.classList.add('active');
+                return;
+            }
+
+            // Build summary section
+            const summaryHtml = `
+                <div class="transactions-summary">
+                    <div class="transactions-summary-item">
+                        <div class="transactions-summary-label">Transactions</div>
+                        <div class="transactions-summary-value">${transactions.length}</div>
+                    </div>
+                    <div class="transactions-summary-item">
+                        <div class="transactions-summary-label">Total Volume</div>
+                        <div class="transactions-summary-value">${meta.symbol}${data.volume.toFixed(2)}</div>
+                    </div>
+                    <div class="transactions-summary-item">
+                        <div class="transactions-summary-label">Total Fees</div>
+                        <div class="transactions-summary-value">${meta.symbol}${Math.abs(data.totalFees).toFixed(2)}</div>
+                    </div>
+                    <div class="transactions-summary-item">
+                        <div class="transactions-summary-label">Avg Fee %</div>
+                        <div class="transactions-summary-value">${(Math.abs(data.totalFees) / data.volume * 100).toFixed(2)}%</div>
+                    </div>
+                </div>
+            `;
+
+            // Build transactions table
+            let tableHtml = `
+                ${summaryHtml}
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Card</th>
+                                <th>Amount</th>
+                                <th>IC</th>
+                                <th>Scheme</th>
+                                <th>Acquirer</th>
+                                <th>Total Fee</th>
+                                <th>Net</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            transactions.forEach(txn => {
+                const date = txn.date ? new Date(txn.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+                const cardLast4 = txn.cardNumber ? txn.cardNumber.slice(-4) : '****';
+                const badgeClass = txn.paymentMethod === 'VISA' ? 'visa' : txn.paymentMethod === 'MC' ? 'mc' : 'other';
+                const net = txn.amount + txn.totalFees; // totalFees is negative
+                const feePct = txn.amount ? (Math.abs(txn.totalFees) / txn.amount * 100).toFixed(2) : '0.00';
+
+                tableHtml += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>
+                            <span class="txn-badge ${badgeClass}">${txn.paymentMethod || '?'}</span>
+                            <span style="margin-left: 5px; color: var(--text-muted);">•••${cardLast4}</span>
+                        </td>
+                        <td class="amount">${meta.symbol}${txn.amount.toFixed(2)}</td>
+                        <td class="amount negative">${meta.symbol}${Math.abs(txn.ic).toFixed(2)}</td>
+                        <td class="amount negative">${meta.symbol}${Math.abs(txn.schemeTotal).toFixed(2)}</td>
+                        <td class="amount negative">${meta.symbol}${Math.abs(txn.acquirerFees).toFixed(2)}</td>
+                        <td class="amount negative">${meta.symbol}${Math.abs(txn.totalFees).toFixed(2)} <span style="font-size: 11px; color: var(--text-muted);">(${feePct}%)</span></td>
+                        <td class="amount positive">${meta.symbol}${net.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += '</tbody></table></div>';
+
+            // Add a footer with explanation
+            tableHtml += `
+                <div style="margin-top: 20px; padding: 15px; background: var(--bg-secondary); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
+                    <strong>💡 Column Details:</strong><br>
+                    <strong>IC</strong> = Interchange (paid to issuing bank) • 
+                    <strong>Scheme</strong> = 1st Plus (Visa/MC network fees) • 
+                    <strong>Acquirer</strong> = 2nd Plus (MDR, gateway, taxes) • 
+                    <strong>Net</strong> = Amount merchant receives
+                </div>
+            `;
+
+            modalBody.innerHTML = tableHtml;
+            modal.classList.add('active');
+        }
+
+        function closeTransactionsModal() {
+            document.getElementById('transactionsModal').classList.remove('active');
         }
 
         // ========================================================================
@@ -1438,27 +2070,30 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                 const grt = parseFloat(row['GRT Amount'] || 0);
                 const st = parseFloat(row['ST Amount'] || 0);
 
-                // 2nd Plus = All acquirer fees (NOT derived from MDR column, but from actual fee columns)
-                // The "MDR Amount" column is misleadingly named - it's just a flat fee, not IC+Scheme+Acquirer
-                const acquirerFees = mdr + gateway + auth + clearing + crossBorder + crossCurrency +
-                    preauth + threeDS + nonThreeDS + vat + wht + grt + st;
+                // 1st Plus (Scheme Fees) - All fees "due to the scheme" per NomuPay documentation:
+                // Auth, Clearing, 3DS, Non-3DS, Cross Border, Cross Currency, Pre-Auth
+                const schemeTotal = scheme + auth + clearing + crossBorder + crossCurrency +
+                    preauth + threeDS + nonThreeDS;
 
-                // True Total Fees = IC + Scheme + All Acquirer Fees
-                const totalFees = ic + scheme + acquirerFees;
+                // 2nd Plus = Acquirer markup only (MDR, Gateway Fee, Taxes)
+                const acquirerFees = mdr + gateway + vat + wht + grt + st;
 
-                // Net Acquirer Markup = 2nd Plus minus operational costs minus taxes
-                const operationalCosts = gateway + auth + clearing + crossBorder + crossCurrency + preauth + threeDS + nonThreeDS;
+                // True Total Fees = IC + Scheme Fees + Acquirer Fees
+                const totalFees = ic + schemeTotal + acquirerFees;
+
+                // Net Acquirer Markup = MDR minus gateway fee minus taxes
                 const taxes = vat + wht + grt + st;
-                const netMarkup = mdr - operationalCosts - taxes; // MDR Amount minus ops/taxes = pure markup
+                const netMarkup = mdr - gateway - taxes;
 
                 // Initialize if needed
                 if (!stats[region]) stats[region] = { _gatewayEvents: gatewayEventFees[region] || { gateway: 0, count: 0, events: {} } };
                 if (!stats[region][cardType]) {
                     stats[region][cardType] = {
-                        count: 0, volume: 0, ic: 0, scheme: 0, acquirerFees: 0, totalFees: 0, mdr: 0,
+                        count: 0, volume: 0, ic: 0, scheme: 0, schemeTotal: 0, acquirerFees: 0, totalFees: 0, mdr: 0,
                         gateway: 0, auth: 0, clearing: 0, crossBorder: 0, crossCurrency: 0,
                         preauth: 0, threeDS: 0, nonThreeDS: 0, vat: 0, wht: 0, grt: 0,
-                        st: 0, netMarkup: 0, currency: currency
+                        st: 0, netMarkup: 0, currency: currency,
+                        transactions: [] // Store individual transactions for drill-down
                     };
                 }
 
@@ -1468,6 +2103,7 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                 bucket.volume += amount;
                 bucket.ic += ic;
                 bucket.scheme += scheme;
+                bucket.schemeTotal += schemeTotal;
                 bucket.acquirerFees += acquirerFees;
                 bucket.totalFees += totalFees;
                 bucket.mdr += mdr;
@@ -1485,6 +2121,28 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                 bucket.st += st;
                 bucket.netMarkup += netMarkup;
 
+                // Store individual transaction for drill-down
+                bucket.transactions.push({
+                    txnId: row['NP Transaction ID'] || '',
+                    date: row['Transaction Date'] || '',
+                    amount: amount,
+                    fundingAmount: parseFloat(row['Funding Amount'] || 0),
+                    currency: currency,
+                    cardNumber: row['Card Number'] || '',
+                    paymentMethod: row['Payment Method'] || '',
+                    issuerLocality: row['Issuer locality'] || '',
+                    issuerCountry: row['Issuer country'] || '',
+                    ic: ic,
+                    schemeTotal: schemeTotal,
+                    acquirerFees: acquirerFees,
+                    totalFees: totalFees,
+                    mdr: mdr,
+                    auth: auth,
+                    clearing: clearing,
+                    crossBorder: crossBorder,
+                    threeDS: threeDS
+                });
+
                 totalProcessed++;
             });
 
@@ -1497,6 +2155,9 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
 
         function renderResults(result) {
             const { stats, totalProcessed, totalSkipped } = result;
+
+            // Store stats globally for drill-down access
+            currentStats = stats;
 
             // Calculate grand totals across all regions
             let grandTotalVolume = 0;
@@ -1556,19 +2217,101 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                     const meta = regionMeta[region] || regionMeta['UNKNOWN'];
 
                     const icPct = data.volume ? Math.abs(data.ic / data.volume * 100) : 0;
-                    const schemePct = data.volume ? Math.abs(data.scheme / data.volume * 100) : 0;
+                    const schemePct = data.volume ? Math.abs(data.schemeTotal / data.volume * 100) : 0;
                     const acquirerPct = data.volume ? Math.abs(data.acquirerFees / data.volume * 100) : 0;
                     const totalFeesPct = data.volume ? Math.abs(data.totalFees / data.volume * 100) : 0;
 
                     // Bar widths based on total fees (not MDR Amount)
                     const totalFeesAbs = Math.abs(data.totalFees);
                     const icWidth = totalFeesAbs ? Math.abs(data.ic) / totalFeesAbs * 100 : 0;
-                    const schemeWidth = totalFeesAbs ? Math.abs(data.scheme) / totalFeesAbs * 100 : 0;
+                    const schemeWidth = totalFeesAbs ? Math.abs(data.schemeTotal) / totalFeesAbs * 100 : 0;
                     const acquirerWidth = totalFeesAbs ? Math.abs(data.acquirerFees) / totalFeesAbs * 100 : 0;
 
+
                     const card = document.createElement('div');
-                    card.className = 'region-card';
+                    card.className = 'region-card has-transactions';
+                    card.setAttribute('data-region', region);
+                    card.setAttribute('data-card-type', cardType);
+
+                    // Calculate total sales count for this region to average gateway fees correctly
+                    const totalRegionSales = Object.keys(stats[region])
+                        .filter(k => k !== '_gatewayEvents')
+                        .reduce((sum, type) => sum + stats[region][type].count, 0);
+
+                    // Gateway Breakdown Logic
+                    let gatewayBreakdownHtml = '';
+                    let totalAllocatedGateway = 0;
+
+                    if (gatewayEvents && gatewayEvents.events && totalRegionSales > 0) {
+                        const eventTypes = Object.keys(gatewayEvents.events);
+                        const actualTotalGatewayFee = Math.abs(gatewayEvents.gateway);
+
+                        // Standard unit rates for weighting (fallback to USD if unknown)
+                        const unitRates = {
+                            'HKD': { rg: 0.40, db: 0.59, three_d: 0.59, rf: 0.59, cp: 0.59 },
+                            'MYR': { rg: 0.20, db: 0.31, three_d: 0.31, rf: 0.31, cp: 0.31 },
+                            'USD': { rg: 0.05, db: 0.08, three_d: 0.08, rf: 0.08, cp: 0.08 },
+                            'THB': { rg: 1.50, db: 2.50, three_d: 2.50, rf: 2.50, cp: 2.50 }
+                        };
+                        const currency = data.currency || 'USD';
+                        const rates = unitRates[currency] || unitRates['USD'];
+
+                        // Calculate weighted total to determine distribution
+                        let estimatedTotal = 0;
+                        eventTypes.forEach(evt => {
+                            const count = gatewayEvents.events[evt];
+                            // specific rate or default to DB rate for unknown events
+                            const rate = rates[evt] || rates['db'];
+                            estimatedTotal += count * rate;
+                        });
+
+                        // Adjustment factor to match actual total
+                        const factor = estimatedTotal > 0 ? (actualTotalGatewayFee / estimatedTotal) : 0;
+
+                        if (eventTypes.length > 0) {
+                            gatewayBreakdownHtml += '<div class="cost-breakdown-list" style="margin-top:4px; margin-bottom:4px; padding-left:8px; border-left: 2px solid rgba(255,255,255,0.2);">';
+
+                            eventTypes.forEach(evt => {
+                                const count = gatewayEvents.events[evt];
+                                if (count > 0) {
+                                    // Calculate cost share for this event type
+                                    const rate = rates[evt] || rates['db'];
+                                    const eventTotalCost = count * rate * factor;
+
+                                    // Allocate to this specific card bucket based on sales count
+                                    // (Cost per sale * number of sales in this bucket)
+                                    const costPerSale = eventTotalCost / totalRegionSales;
+                                    const allocated = costPerSale * data.count;
+                                    totalAllocatedGateway += allocated;
+
+                                    // Format event name
+                                    let label = evt;
+                                    if (evt.toLowerCase().includes('three')) label = '3DS (3D Secure)';
+                                    else if (evt.toLowerCase() === 'db') label = 'DB (Debit Auth)';
+                                    else if (evt.toLowerCase() === 'rg') label = 'RG (Registration)';
+                                    else if (evt.toLowerCase() === 'rf') label = 'RF (Refund)';
+                                    else if (evt.toLowerCase() === 'cp') label = 'CP (Capture)';
+
+                                    gatewayBreakdownHtml += `
+                                        <div style="display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,0.85); margin-bottom:2px;">
+                                            <span>${label}</span>
+                                            <span>${meta.symbol}${allocated.toFixed(2)} <span style="opacity:0.6">(${costPerSale.toFixed(2)}/txn)</span></span>
+                                        </div>
+                                    `;
+                                }
+                            });
+                            gatewayBreakdownHtml += '</div>';
+                        }
+                    }
+
+                    // Payout Load Fee Logic (Estimated 0.15% of Volume)
+                    const payoutLoadEst = Math.abs(data.volume) * 0.0015;
+
+                    // Combined Total
+                    const combinedTotalCost = Math.abs(data.totalFees) + totalAllocatedGateway + payoutLoadEst;
+
                     card.innerHTML = `
+                        <div class="card-clickable-indicator">👆 Click for ${data.count} txn${data.count > 1 ? 's' : ''}</div>
                         <div class="region-header">
                             <div class="region-title">
                                 <span class="region-flag">${meta.flag}</span>
@@ -1588,7 +2331,7 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                             </div>
                             <div class="region-stat">
                                 <div class="region-stat-label">Card Type</div>
-                                <div class="region-stat-value">${cardType}</div>
+                                <div class="region-stat-value" style="font-weight: 700;">${cardType}</div>
                             </div>
                         </div>
 
@@ -1616,12 +2359,16 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                                         <span class="info-icon">i</span>
                                     </div>
                                     <div class="fee-amount">
-                                        <span class="fee-value">${meta.symbol}${Math.abs(data.scheme).toFixed(2)}</span>
+                                        <span class="fee-value">${meta.symbol}${Math.abs(data.schemeTotal).toFixed(2)}</span>
                                         <span class="fee-percentage">${schemePct.toFixed(2)}%</span>
                                     </div>
                                 </div>
                                 <div class="fee-bar">
                                     <div class="fee-bar-fill fee-bar-first" style="width: ${schemeWidth.toFixed(1)}%"></div>
+                                </div>
+
+                                <div class="fee-tree">
+                                    ${generateSchemeTreeItems(data, meta.symbol)}
                                 </div>
                             </div>
 
@@ -1641,7 +2388,7 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                                 </div>
 
                                 <div class="fee-tree">
-                                    ${generateTreeItems(data, meta.symbol)}
+                                    ${generateAcquirerTreeItems(data, meta.symbol)}
                                 </div>
                             </div>
                         </div>
@@ -1650,7 +2397,38 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                             <div class="total-label">Total Fees (Sales) <span class="info-icon" style="background: #ffffff; color: #212121;">i</span></div>
                             <div class="total-value">${meta.symbol}${Math.abs(data.totalFees).toFixed(2)} (${totalFeesPct.toFixed(2)}%)</div>
                         </div>
+
+                        ${gatewayEvents && Math.abs(gatewayEvents.gateway) > 0.001 ? `
+                        <div class="total-section" style="background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%); margin-top: 8px;">
+                            <div class="total-label" style="color: rgba(255,255,255,0.9); margin-bottom: 2px;">+ Gateway (Allocated) <span class="info-icon" style="background:rgba(255,255,255,0.2);color:white" title="Allocated based on region volume">i</span></div>
+                            ${gatewayBreakdownHtml}
+                            <div style="border-top: 1px solid rgba(255,255,255,0.3); margin-top: 4px; padding-top: 4px; display:flex; justify-content:space-between; font-weight:600;">
+                                <span>Subtotal</span>
+                                <div>${meta.symbol}${totalAllocatedGateway.toFixed(2)}</div>
+                            </div>
+                        </div>
+
+                        <div class="total-section" style="background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); margin-top: 4px;">
+                            <div class="total-label" style="color: rgba(255,255,255,0.9);">+ Payout Load (Est. 0.15%)</div>
+                            <div class="total-value">${meta.symbol}${payoutLoadEst.toFixed(2)}</div>
+                        </div>
+
+                        <div class="total-section" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); margin-top: 4px;">
+                            <div class="total-label" style="color: rgba(255,255,255,0.9);">💰 Total Cost (All Incl.)</div>
+                            <div class="total-value">${meta.symbol}${combinedTotalCost.toFixed(2)} (${(combinedTotalCost / data.volume * 100).toFixed(2)}%)</div>
+                        </div>
+                        ` : ''}
                     `;
+
+                    // Add click handler for drill-down (but not for info icons)
+                    card.addEventListener('click', (e) => {
+                        // Don't trigger drill-down if clicking on info icons or clickable fee items
+                        if (e.target.closest('.fee-item.clickable') || e.target.closest('.total-section.clickable')) {
+                            return;
+                        }
+                        showTransactionsModal(region, cardType);
+                    });
+
                     regionsGrid.appendChild(card);
                 });
 
@@ -1659,18 +2437,17 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                     const meta = regionMeta[region] || regionMeta['UNKNOWN'];
                     const events = gatewayEvents.events || {};
                     const gwCard = document.createElement('div');
-                    gwCard.className = 'region-card';
-                    gwCard.style.background = 'linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%)';
+                    gwCard.className = 'region-card gateway-card';
                     gwCard.innerHTML = `
                         <div class="region-header">
                             <div class="region-title">
                                 <span class="region-flag">⚙️</span>
                                 <span class="region-name">Gateway Events</span>
                             </div>
-                            <div class="region-code" style="background: #856404;">${region}</div>
+                            <div class="region-code">${region}</div>
                         </div>
 
-                        <div class="region-stats" style="background: rgba(255,255,255,0.5);">
+                        <div class="region-stats">
                             <div class="region-stat">
                                 <div class="region-stat-label">Event Rows</div>
                                 <div class="region-stat-value">${gatewayEvents.count}</div>
@@ -1682,9 +2459,9 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                         </div>
 
                         <div class="fee-breakdown">
-                            <p style="font-size: 13px; color: #5d4e0f; margin-bottom: 15px;">These are <strong>fixed per-event fees</strong> billed separately from Sale transactions:</p>
+                            <p style="font-size: 13px; margin-bottom: 15px;">These are <strong>fixed per-event fees</strong> billed separately from Sale transactions:</p>
                             ${Object.keys(events).filter(k => events[k] > 0).map(eventType => `
-                                <div class="fee-tree-item" style="background: rgba(255,255,255,0.7);">
+                                <div class="fee-tree-item">
                                     <div class="fee-tree-label">
                                         <span class="fee-tree-icon">├─</span> ${EVENT_TYPES[eventType] || eventType}
                                     </div>
@@ -1693,7 +2470,7 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                             `).join('')}
                         </div>
 
-                        <div class="total-section" style="background: #856404;">
+                        <div class="total-section">
                             <div class="total-label">Gateway Events Fee</div>
                             <div class="total-value">${meta.symbol}${Math.abs(gatewayEvents.gateway).toFixed(2)}</div>
                         </div>
@@ -1710,19 +2487,173 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                     setTimeout(() => bar.style.width = width, 50);
                 });
             }, 100);
+
+            // Update Transaction Cost Summary with calculated values
+            updateTransactionCostSummary(stats, grandTotalVolume, totalProcessed);
         }
 
-        function generateTreeItems(data, symbol) {
+        // Update the Transaction Cost Summary section with data from CSV
+        function updateTransactionCostSummary(stats, totalVolume, txnCount) {
+            // Aggregate all gateway events across regions and find primary currency
+            let totalRg = 0, totalDb = 0, total3ds = 0, totalRf = 0;
+            let totalGatewayFee = 0;
+            let primaryCurrency = 'USD';
+            let currencySymbol = '$';
+
+            // FX rates to USD (approximate)
+            const fxToUsd = { 'HKD': 7.8, 'MYR': 4.5, 'THB': 35, 'USD': 1, 'EUR': 0.92 };
+
+            Object.keys(stats).forEach(region => {
+                const gwEvents = stats[region]._gatewayEvents;
+                if (gwEvents && gwEvents.events) {
+                    totalRg += gwEvents.events.rg || 0;
+                    totalDb += gwEvents.events.db || 0;
+                    total3ds += gwEvents.events.three_d || 0;
+                    totalRf += gwEvents.events.rf || 0;
+                    totalGatewayFee += Math.abs(gwEvents.gateway || 0);
+                }
+                // Get currency from first card type data
+                Object.keys(stats[region]).filter(k => k !== '_gatewayEvents').forEach(cardType => {
+                    if (stats[region][cardType].currency && !primaryCurrency) {
+                        primaryCurrency = stats[region][cardType].currency;
+                    }
+                });
+            });
+
+            // Determine currency from data
+            Object.keys(stats).forEach(region => {
+                Object.keys(stats[region]).filter(k => k !== '_gatewayEvents').forEach(cardType => {
+                    const cur = stats[region][cardType].currency;
+                    if (cur) {
+                        primaryCurrency = cur;
+                        currencySymbol = cur === 'MYR' ? 'RM ' : (cur === 'THB' ? '฿' : (cur + ' '));
+                    }
+                });
+            });
+
+            const fxRate = fxToUsd[primaryCurrency] || 1;
+
+            // Calculate per-event costs if we have data
+            const hasGatewayData = (totalRg + totalDb + total3ds) > 0;
+            const avgTxnAmount = txnCount > 0 ? totalVolume / txnCount : 0;
+
+            // Known unit costs in local currency (from data analysis)
+            const localRates = {
+                'HKD': { rg: 0.40, db: 0.59, tds: 0.59 },
+                'MYR': { rg: 0.20, db: 0.31, tds: 0.31 },
+                'USD': { rg: 0.05, db: 0.08, tds: 0.08 }
+            };
+            const rates = localRates[primaryCurrency] || localRates['USD'];
+
+            // Calculate Factor to match Actual Total from CSV
+            let estimatedTotal = 0;
+            estimatedTotal += totalRg * (rates.rg || 0);
+            estimatedTotal += totalDb * (rates.db || 0);
+            estimatedTotal += total3ds * (rates.tds || 0);
+            // Add other event types if tracked, but these are the main ones
+
+            let scalingFactor = 1.0;
+            if (estimatedTotal > 0 && totalGatewayFee > 0) {
+                scalingFactor = totalGatewayFee / estimatedTotal;
+            }
+
+            // Apply scaling factor to show "Actual Weighted Average" cost
+            let calculatedRgCost = (rates.rg || 0) * scalingFactor;
+            let calculatedDbCost = (rates.db || 0) * scalingFactor;
+            let calculated3dsCost = (rates.tds || 0) * scalingFactor;
+
+            // If we have data, we are showing calculated values
+            let dataSource = hasGatewayData ? 'calculated' : 'estimated';
+
+            const gatewaySubtotal = calculatedRgCost + calculatedDbCost + calculated3dsCost;
+            const gatewaySubtotalUsd = gatewaySubtotal / fxRate;
+            const indicator = dataSource === 'calculated' ? '📊' : '📐';
+
+            // Update the DOM
+            document.getElementById('costSummaryDataSource').innerHTML =
+                dataSource === 'calculated'
+                    ? `📊 From CSV (${totalRg + totalDb + total3ds} events in ${primaryCurrency})`
+                    : `📐 Estimated in USD (load data for actual)`;
+            document.getElementById('costSummaryDataSource').style.background =
+                dataSource === 'calculated' ? 'var(--success-color)' : 'var(--warning-bg)';
+            document.getElementById('costSummaryDataSource').style.color =
+                dataSource === 'calculated' ? 'white' : 'inherit';
+
+            const showCurrency = dataSource === 'calculated' ? currencySymbol : '$';
+            const showUsdEquiv = dataSource === 'calculated' && primaryCurrency !== 'USD';
+
+            document.getElementById('costRg').innerHTML =
+                `${showCurrency}${calculatedRgCost.toFixed(2)}${showUsdEquiv ? ` <span style="font-size:10px;opacity:0.7">≈$${(calculatedRgCost / fxRate).toFixed(2)}</span>` : ''} ${indicator}`;
+            document.getElementById('costDb').innerHTML =
+                `${showCurrency}${calculatedDbCost.toFixed(2)}${showUsdEquiv ? ` <span style="font-size:10px;opacity:0.7">≈$${(calculatedDbCost / fxRate).toFixed(2)}</span>` : ''} ${indicator}`;
+            document.getElementById('cost3ds').innerHTML =
+                `${showCurrency}${calculated3dsCost.toFixed(2)}${showUsdEquiv ? ` <span style="font-size:10px;opacity:0.7">≈$${(calculated3dsCost / fxRate).toFixed(2)}</span>` : ''} ${indicator}`;
+            document.getElementById('costGatewaySubtotal').innerHTML =
+                `${showCurrency}${gatewaySubtotal.toFixed(2)}${showUsdEquiv ? ` <span style="font-size:10px;opacity:0.7">≈$${gatewaySubtotalUsd.toFixed(2)}</span>` : ''} ${indicator}`;
+
+            document.getElementById('costTotalFixed').innerHTML =
+                `${showCurrency}${gatewaySubtotal.toFixed(2)}${showUsdEquiv ? `<span style="font-size:18px;opacity:0.8"> ≈$${gatewaySubtotalUsd.toFixed(2)}</span>` : ''}`;
+
+            // Calculate as percentage of average transaction
+            if (avgTxnAmount > 0) {
+                const pctOfTxn = (gatewaySubtotal / avgTxnAmount * 100).toFixed(2);
+                document.getElementById('costTotalPct').innerHTML =
+                    `= <strong>${pctOfTxn}%</strong> of avg txn (${showCurrency}${avgTxnAmount.toFixed(2)})`;
+            } else {
+                document.getElementById('costTotalPct').textContent =
+                    'Load CSV to see % of avg transaction';
+            }
+
+            // Update formula
+            const loadFeePct = '0.15';
+            document.getElementById('costFormula').innerHTML = `
+                ${indicator} <strong>Legend:</strong> 📐 = Estimated • 📊 = Calculated from CSV<br>
+                💡 <strong>Total Fees Per Txn</strong> = Gateway (${showCurrency}${gatewaySubtotal.toFixed(2)}) + Payout Load (${loadFeePct}%) + IC++ Fees
+            `;
+        }
+
+        // Generate tree items for Scheme (1st Plus) breakdown
+        // Per NomuPay docs, these are all "Fee due to the scheme":
+        // Auth, Clearing, 3DS, Non-3DS, Cross Border, Cross Currency, Pre-Auth
+        function generateSchemeTreeItems(data, symbol) {
             const items = [
-                { label: 'MDR Amount', amount: data.mdr },
-                { label: 'Gateway Fee (Sales)', amount: data.gateway },
+                { label: 'Scheme Fee Bucket', amount: data.scheme },
                 { label: 'Authorization Fee', amount: data.auth },
                 { label: 'Clearing Fee', amount: data.clearing },
                 { label: 'Cross-Border Fee', amount: data.crossBorder },
                 { label: 'Cross-Currency Fee', amount: data.crossCurrency },
-                { label: 'Preauth Fee', amount: data.preauth },
+                { label: 'Pre-Auth Fee', amount: data.preauth },
                 { label: '3DS Fee', amount: data.threeDS },
                 { label: 'Non-3DS Fee', amount: data.nonThreeDS },
+            ];
+
+            let html = '';
+            const nonZeroItems = items.filter(item => Math.abs(item.amount) > 0.001);
+
+            nonZeroItems.forEach((item, index) => {
+                const isLast = index === nonZeroItems.length - 1;
+                const pct = data.volume ? Math.abs(item.amount / data.volume * 100) : 0;
+                const icon = isLast ? '└─' : '├─';
+
+                html += `
+                    <div class="fee-tree-item">
+                        <div class="fee-tree-label">
+                            <span class="fee-tree-icon">${icon}</span> ${item.label}
+                        </div>
+                        <div class="fee-tree-amount">${symbol}${Math.abs(item.amount).toFixed(2)} (${pct.toFixed(3)}%)</div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        // Generate tree items for Acquirer (2nd Plus) breakdown
+        // Only includes: MDR Amount, Gateway Fee, and Taxes
+        function generateAcquirerTreeItems(data, symbol) {
+            const items = [
+                { label: 'MDR Amount', amount: data.mdr },
+                { label: 'Gateway Fee (Sales)', amount: data.gateway },
                 { label: 'VAT', amount: data.vat },
                 { label: 'WHT', amount: data.wht },
                 { label: 'GRT', amount: data.grt },
@@ -1739,13 +2670,13 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
                 const isLast = index === nonZeroItems.length - 1;
                 const pct = data.volume ? Math.abs(item.amount / data.volume * 100) : 0;
                 const icon = isLast ? '└─' : '├─';
-                const highlightStyle = item.highlight ? 'background: #fff3cd; border-left: 3px solid #ffc107;' : '';
-                const totalStyle = item.isTotal ? 'font-weight: bold; background: #e8f5e9;' : '';
+                const highlightClass = item.highlight ? 'is-highlight' : '';
+                const totalClass = item.isTotal ? 'is-total' : '';
                 const breakdownHtml = item.breakdown ?
-                    `<div style="font-size: 11px; color: #5d4e0f; margin-top: 4px; font-style: italic;">📊 ${item.breakdown}</div>` : '';
+                    `<div style="font-size: 11px; margin-top: 4px; font-style: italic;" class="fee-tree-breakdown">📊 ${item.breakdown}</div>` : '';
 
                 html += `
-                    <div class="fee-tree-item" style="${highlightStyle}${totalStyle}">
+                    <div class="fee-tree-item ${highlightClass} ${totalClass}">
                         <div class="fee-tree-label">
                             <span class="fee-tree-icon">${icon}</span> ${item.label}
                             ${breakdownHtml}
@@ -1850,8 +2781,10 @@ Actual Total Charged = Total Fees (Sales) + Gateway Events Fees</div>
 
         // Close modal on click outside
         window.onclick = (e) => {
-            const modal = document.getElementById('calculationModal');
-            if (e.target === modal) closeModal();
+            const calcModal = document.getElementById('calculationModal');
+            const txnModal = document.getElementById('transactionsModal');
+            if (e.target === calcModal) closeModal();
+            if (e.target === txnModal) closeTransactionsModal();
         };
 
         // ========================================================================

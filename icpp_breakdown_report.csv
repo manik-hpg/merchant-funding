@@ -1,3 +1,0 @@
-Region,CardType,TxnCount,TotalVolume,Currency,IC_Total,IC_Avg_Pct,FirstPlus_Total,FirstPlus_Avg_Pct,SecondPlus_Total,SecondPlus_Avg_Pct,GatewayFee_Total,AuthorizationFee_Total,ClearingFee_Total,CrossBorderFee_Total,CrossCurrencyFee_Total,PreauthFee_Total,ThreeDSFee_Total,NonThreeDSFee_Total,VAT_Total,WHT_Total,GRT_Total,ST_Total,NetAcquirerMarkup_Total,MDR_Total,MDR_Avg_Pct
-HK,CC,1,150.00,HKD,-3.11,2.07,-0.15,0.10,3.04,2.03,0.00,-0.04,-0.06,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,3.14,-0.22,0.15
-HK,DC,1,100.00,HKD,-2.05,2.05,-0.10,0.10,2.00,2.00,0.00,0.00,-0.10,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,2.10,-0.15,0.15
